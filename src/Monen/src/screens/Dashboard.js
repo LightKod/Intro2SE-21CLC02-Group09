@@ -7,7 +7,7 @@ import {
   Text,
   ScrollView,
 } from "react-native";
-import {Header} from "../components/HeaderLa/header.index";
+import Header from "../components/HeaderLa/header.index";
 import { white } from "../constants/colors";
 import SearchBar from "../components/SearchBar/SearchBar.index";
 import CustomText from "../components/Text/CustomText/CustomText.index";
@@ -16,7 +16,7 @@ import DeckCard from "../components/Dashboard/DeckCard";
 import HorizontalScrollView from "../components/Dashboard/HorizontalScrollView";
 import deckData from "../data/deckData";
 const Dashboard = () => {
-  const profilePictureSource = require("../assets/tmp.png");
+  const profilePictureSource = require('../assets/tmp.png');
 
   const handleMenuPress = () => {
     // Add your logic for handling menu button press

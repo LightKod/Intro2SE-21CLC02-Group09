@@ -1,7 +1,7 @@
 // BottomNavigator.js
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Dashboard from "screens/Dashboard";
+import Dashboard from "../screens/Dashboard";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 const Tab = createBottomTabNavigator();
