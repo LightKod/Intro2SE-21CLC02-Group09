@@ -16,7 +16,6 @@ import {
   Montserrat_800ExtraBold,
   Montserrat_300Light,
 } from "@expo-google-fonts/montserrat";
-import { NavigationContainer } from "@react-navigation/native";
 import { white, dark_gray, black } from "constants/colors.js";
 
 import { library } from "@fortawesome/fontawesome-svg-core";

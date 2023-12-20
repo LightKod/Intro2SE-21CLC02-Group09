@@ -11,9 +11,9 @@ import {
 
 import { faMugSaucer } from "@fortawesome/free-solid-svg-icons/faMugSaucer";
 
-import { dark_gray } from "constants/colors.js";
+import { dark_gray } from "../../constants/colors.js";
 
-const Header = ({ username, profilePictureSource, onMenuPress }) => {
+export default function Header  ({ username, profilePictureSource, onMenuPress })  {
   return (
     <SafeAreaView style={styles.headerContainer}>
       <View style={styles.profileContainer}>
@@ -67,4 +67,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Header;
