@@ -10,25 +10,25 @@ import BackButton from '../components/BackButton'
 import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
+import { confirmPasswordValidator } from '../helpers/confirmPassword'
 import {KeyboardAvoidingView} from 'react-native'
 import SocialGroup from '../components/SocialGroup'
-export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
-
-  const onLoginPressed = () => {
-    const emailError = emailValidator(email.value)
-    const passwordError = passwordValidator(password.value)
-    if (emailError || passwordError) {
-      setEmail({ ...email, error: emailError })
-      setPassword({ ...password, error: passwordError })
-      return
+export default function NewPasswordScreen({ navigation }) {
+    const [password, setPassword] = useState({ value: '', error: '' })
+    const [confirmPassword, setConfirmPassword] = useState({value: '',error: ''})
+    const onNewPasswordPressed = () => {
+      const passwordError = passwordValidator(password.value)
+      const confirmPasswordError = confirmPasswordValidator(password.value,confirmPassword.value)
+      if (emailError || passwordError || nameError) {
+        setPassword({ ...password, error: passwordError })
+        setConfirmPassword({ ...confirmPassword, error: confirmPasswordError })
+        return
+      }
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Dashboard' }],
+      })
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
-    })
-  }
 
   return (
     <KeyboardAvoidingView  style={styles.container}>
@@ -36,25 +36,11 @@ export default function LoginScreen({ navigation }) {
       {/* <BackButton  /> */}
 
       {/* <Logo /> */}
-      <Header>Welcome back.</Header>
+      <Header>Enter new password.</Header>
       <Text style={styles.subheader}>Sign in with your email and password</Text>
       <TextInput
-        content="email"
-        placeholder="Enter your Email"
-        returnKeyType="next"
-        value={email.value}
-        onChangeText={(text) => setEmail({ value: text, error: '' })}
-        error={!!email.error}
-        errorText={email.error}
-        autoCapitalize="none"
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        keyboardType="email-address"
-        
-      />
-      <TextInput
-        content="password"
-        placeholder="Enter Your Password"
+        content="Password"
+        placeholder="At least 8 characters"
         returnKeyType="done"
         value={password.value}
         onChangeText={(text) => setPassword({ value: text, error: '' })}
@@ -62,23 +48,22 @@ export default function LoginScreen({ navigation }) {
         errorText={password.error}
         secureTextEntry
       />
-      <View style={styles.forgotPassword}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ResetPasswordScreen')}
-        >
-          <Text style={styles.forgot}>Forgot your password?</Text>
-        </TouchableOpacity>
-      </View>
-      <Button mode="contained" style={styles.button} onPress={onLoginPressed}>
+      <TextInput
+        content="confirm Password"
+        placeholder="confirm your Password"
+        returnKeyType="done"
+        value={confirmPassword.value}
+        onChangeText={(text) => setConfirmPassword({ value: text, error: '' })}
+        error={!!confirmPassword.error}
+        errorText={confirmPassword.error}
+        secureTextEntry
+      />
+     
+      <Button mode="contained" style={styles.button} onPress={onNewPasswordPressed}>
         Login
       </Button>
-      <View style={styles.row}>
-        <Text style={{color: theme.colors.secondary}}>Don’t have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>
-          <Text  style={styles.link}>Sign up</Text>
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.social}>or Login with</Text>
+      
+      <Text style={styles.social}>or via social media</Text>
       <SocialGroup />
     </KeyboardAvoidingView >
   )

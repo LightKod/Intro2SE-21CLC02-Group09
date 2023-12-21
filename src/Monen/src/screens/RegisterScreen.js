@@ -37,8 +37,8 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <BackButton goBack={navigation.goBack} /> */}
-      <BackButton />
+      <BackButton goBack={navigation.goBack} />
+      {/* <BackButton /> */}
       {/* <Logo /> */}
       <Header>Create Account Now</Header>
       <TextInput
@@ -105,10 +105,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     width: '100%',
-    maxWidth: 340,
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: "#000000",
+    fontFamily: "Montserrat_400Regular",
   },
   row: {
     flexDirection: 'row',
