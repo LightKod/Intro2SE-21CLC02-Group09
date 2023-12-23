@@ -8,7 +8,7 @@ import RegisterScreen from "./src/screens/RegisterScreen";
 import ResetPasswordScreen from "./src/screens/ResetPasswordScreen";
 import OtpScreen from "./src/screens/otpWithEmailScreen";
 import NewPasswordScreen from './src/screens/NewPasswordScreen';
-// import OtwScreen from "./src/screens/otpWithEmailScreen";
+import SettingScreen from './src/screens/SettingScreen';
 import {
   useFonts,
   Montserrat_400Regular,
@@ -51,7 +51,7 @@ export default function App() {
             headerShown: false,
           }}
         >
-          <Stack.Screen name="StartScreen" component={NewPasswordScreen} />
+          <Stack.Screen name="StartScreen" component={StartScreen} />
           <Stack.Screen name="LoginScreen" component={LoginScreen} />
           <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
           <Stack.Screen name="Dashboard" component={Dashboard} />
@@ -61,6 +61,7 @@ export default function App() {
             component={ResetPasswordScreen}
           />
           <Stack.Screen name="OtpScreen" component={OtpScreen} />
+          <Stack.Screen name="NewPasswordScreen" component={NewPasswordScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

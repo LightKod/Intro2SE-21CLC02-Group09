@@ -3,7 +3,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Dashboard from "../screens/Dashboard";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-
+import SettingScreen from "../screens/SettingScreen";
 const Tab = createBottomTabNavigator();
 const getTabBarIcon =
   (icon) =>
@@ -48,7 +48,7 @@ const BottomNavigator = () => {
       <Tab.Screen name="Library" component={Dashboard} />
       <Tab.Screen name="Home" component={Dashboard} />
       <Tab.Screen name="Course" component={Dashboard} />
-      <Tab.Screen name="Settings" component={Dashboard} />
+      <Tab.Screen name="Settings" component={SettingScreen} />
     </Tab.Navigator>
   );
 };

@@ -21,7 +21,7 @@ export default function OtwScreen({ navigation }) {
             setEmail({ ...email, error: emailError })
             return
         }
-        navigation.navigate('LoginScreen')
+        navigation.navigate('NewPasswordScreen')
     }
 
     return (
