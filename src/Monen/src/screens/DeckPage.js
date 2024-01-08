@@ -8,14 +8,18 @@ import {
   ScrollView,
 } from "react-native";
 import Header from "../components/Headers/MainHeader";
-import { white } from "../constants/colors";
-import SearchBar from "components/SearchBar/SearchBar.index";
+import { white, dark_gray } from "../constants/colors";
+import SearchBar from "/components/SearchBar/SearchBar.index";
 import CustomText from "../components/Text/CustomText/CustomText.index";
 import UserProgress from "../components/Dashboard/UserProgress";
-import DeckCard from "../components/Dashboard/DeckCard";
+import DeckCard from "/components/Card/DeckCard";
 import HorizontalScrollView from "components/Views/HorizontalScrollView";
 import deckData from "../data/deckData";
-const Dashboard = () => {
+import { TouchableOpacity } from "react-native";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import VerticalScrollView from "../components/Views/VerticalScrollView";
+
+const DeckPage = () => {
   const profilePictureSource = require("../assets/tmp.png");
 
   const handleMenuPress = () => {
@@ -31,20 +35,13 @@ const Dashboard = () => {
         onMenuPress={handleMenuPress}
       />
       <ScrollView contentContainerStyle={styles.body}>
-        <CustomText style={styles.welcomeText}>Welcome back!</CustomText>
-        <SearchBar placeholder={"Learning something new today?"} />
-        <CustomText style={styles.sectionText}>Your progress</CustomText>
-        <UserProgress />
-        <CustomText style={styles.sectionText}>Recently learn decks</CustomText>
-        <HorizontalScrollView
-          data={deckData}
-          renderItem={({ item }) => <DeckCard {...item} />}
-          keyExtractor={(item, index) => index.toString()}
-        />
-        <CustomText style={styles.sectionText}>
-          What others are learning...
-        </CustomText>
-        <HorizontalScrollView
+        <View style={styles.topSearch}>
+          <SearchBar placeholder={"Search for a deck"} />
+          <TouchableOpacity onPress={handleMenuPress} style={styles.addButton}>
+            <FontAwesomeIcon icon="fa-plus" color={"white"} size={26} />
+          </TouchableOpacity>
+        </View>
+        <VerticalScrollView
           data={deckData}
           renderItem={({ item }) => <DeckCard {...item} />}
           keyExtractor={(item, index) => index.toString()}
@@ -54,7 +51,7 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DeckPage;
 
 const styles = StyleSheet.create({
   container: {
@@ -62,20 +59,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000",
     fontFamily: "Montserrat_400Regular",
   },
+  topSearch: {
+    flexDirection: "row",
+    padding: 10,
+    paddingTop: 0,
+    flex: 1,
+  },
+  searchBar: {
+    flex: 1,
+  },
+  addButton: {
+    padding: 10,
+    borderRadius: 10,
+    width: 50,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: dark_gray,
+    marginLeft: 10,
+  },
   body: {
     padding: 15,
-  },
-  welcomeText: {
-    fontFamily: "Montserrat_700Bold",
-    fontSize: 28,
-    color: white,
-    marginBottom: 14,
-  },
-  sectionText: {
-    fontFamily: "Montserrat_700Bold",
-    fontSize: 20,
-    color: white,
-    marginTop: 24,
-    marginBottom: 10,
   },
 });

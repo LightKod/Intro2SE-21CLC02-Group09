@@ -3,6 +3,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Dashboard from "../screens/Dashboard";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import DeckPage from "../screens/DeckPage";
 
 const Tab = createBottomTabNavigator();
 const getTabBarIcon =
@@ -13,6 +14,7 @@ const getTabBarIcon =
 const BottomNavigator = () => {
   return (
     <Tab.Navigator
+      initialRouteName="Home"
       screenOptions={({ route }) => ({
         headerShown: false, // Hide the header
         tabBarStyle: { backgroundColor: "#000000" }, // Set background color
@@ -44,7 +46,7 @@ const BottomNavigator = () => {
         },
       })}
     >
-      <Tab.Screen name="Deck" component={Dashboard} />
+      <Tab.Screen name="Deck" component={DeckPage} />
       <Tab.Screen name="Library" component={Dashboard} />
       <Tab.Screen name="Home" component={Dashboard} />
       <Tab.Screen name="Course" component={Dashboard} />

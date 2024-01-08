@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     margin: 3,
     padding: 4,
     paddingLeft: 8,
-    borderWidth: 0.3,
     borderColor: borderColor,
   },
   topRow: {

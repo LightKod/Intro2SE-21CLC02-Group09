@@ -1,4 +1,4 @@
-import 'react-native-gesture-handler';
+import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import Dashboard from "./src/screens/Dashboard";
@@ -6,7 +6,6 @@ import LoginScreen from "./src/screens/login.index";
 import StartScreen from "./src/screens/StartScreen";
 import RegisterScreen from "./src/screens/RegisterScreen";
 import ResetPasswordScreen from "./src/screens/ResetPasswordScreen";
-
 
 // import OtwScreen from "./src/screens/otpWithEmailScreen";
 import {
@@ -25,11 +24,11 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 import BottomNavigator from "./src/navigations/BottomNavigation";
 
 library.add(fas, fab, far);
-import { Provider } from 'react-native-paper'
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
+import { Provider } from "react-native-paper";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 library.add(fas, fab, far);
-const Stack = createStackNavigator()
+const Stack = createStackNavigator();
 
 export default function App() {
   const [fontsLoaded] = useFonts({

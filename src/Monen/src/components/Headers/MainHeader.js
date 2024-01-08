@@ -13,7 +13,11 @@ import { faMugSaucer } from "@fortawesome/free-solid-svg-icons/faMugSaucer";
 
 import { dark_gray } from "../../constants/colors.js";
 
-export default function Header  ({ username, profilePictureSource, onMenuPress })  {
+export default function Header({
+  username,
+  profilePictureSource,
+  onMenuPress,
+}) {
   return (
     <SafeAreaView style={styles.headerContainer}>
       <View style={styles.profileContainer}>
@@ -25,7 +29,7 @@ export default function Header  ({ username, profilePictureSource, onMenuPress }
       </TouchableOpacity>
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -34,7 +38,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "black",
     padding: 15,
-    marginTop: 20,
+    margin: 20,
+    marginBottom: 0,
+    marginTop: 5,
   },
   profileContainer: {
     flexDirection: "row",
@@ -46,7 +52,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     marginRight: 10,
     borderColor: "white",
-    borderWidth: 2,
+    borderWidth: 1,
   },
   username: {
     color: "white",
@@ -66,4 +72,3 @@ const styles = StyleSheet.create({
     color: "black",
   },
 });
-

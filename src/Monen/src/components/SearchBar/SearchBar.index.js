@@ -3,13 +3,13 @@ import { View, TextInput, StyleSheet } from "react-native";
 import { white, dark_gray, borderColor } from "constants/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
-const SearchBar = () => {
+const SearchBar = ({ placeholder }) => {
   return (
     <View style={styles.container}>
       <FontAwesomeIcon icon={"fa-search"} color="white" />
       <TextInput
         style={styles.input}
-        placeholder="Learning something new today?"
+        placeholder={placeholder}
         placeholderTextColor="grey"
       />
     </View>
@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: 20,
-    borderWidth: 0.3,
     borderColor: borderColor,
+    flex: 1,
   },
   input: {
     color: white,

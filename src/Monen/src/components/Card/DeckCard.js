@@ -1,6 +1,6 @@
 // StatCard.js
 import React from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import CustomText from "../Text/CustomText/CustomText.index";
 import { dark_gray, white, borderColor } from "../../constants/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -12,20 +12,30 @@ const DeckCard = ({
   createDate,
   profilePictureSource,
 }) => {
+  const handleCardClick = () => {
+    console.log("DeckCard clicked!");
+    // Add any other actions you want to perform on click
+  };
+
   return (
-    <View style={styles.card}>
-      <View style={styles.contentContainer}>
-        <CustomText style={styles.topLeftText}>{deckName}</CustomText>
-        <CustomText style={styles.bodyText}>{deckDescription}</CustomText>
-      </View>
-      <View style={styles.bottomRow}>
-        <View style={styles.creatorContainer}>
-          <Image source={profilePictureSource} style={styles.profilePicture} />
-          <CustomText style={styles.userNameText}>{userName}</CustomText>
+    <TouchableOpacity activeOpacity={0.7} onPress={handleCardClick}>
+      <View style={styles.card}>
+        <View style={styles.contentContainer}>
+          <CustomText style={styles.topLeftText}>{deckName}</CustomText>
+          <CustomText style={styles.bodyText}>{deckDescription}</CustomText>
         </View>
-        <CustomText style={styles.dateText}>{createDate}</CustomText>
+        <View style={styles.bottomRow}>
+          <View style={styles.creatorContainer}>
+            <Image
+              source={profilePictureSource}
+              style={styles.profilePicture}
+            />
+            <CustomText style={styles.userNameText}>{userName}</CustomText>
+          </View>
+          <CustomText style={styles.dateText}>{createDate}</CustomText>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -37,8 +47,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderColor: borderColor,
     height: 150,
-    width: 210,
     alignSelf: "stretch", // Ensures the card stretches to fill its container
+    marginBottom: 10,
   },
   contentContainer: {
     flex: 1, // Take up remaining space in the card
