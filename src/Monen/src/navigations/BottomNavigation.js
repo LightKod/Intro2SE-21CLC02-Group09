@@ -1,16 +1,29 @@
 // BottomNavigator.js
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
 import Dashboard from "../screens/Dashboard";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import DeckPage from "../screens/DeckPage";
+import DeckView from "../screens/DeckView";
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 const getTabBarIcon =
   (icon) =>
   ({ color, size }) => (
     <FontAwesomeIcon icon={icon} color={color} size={size} />
   );
+const DeckStack = () => (
+  <Stack.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}
+  >
+    <Stack.Screen name="DeckPage" component={DeckPage} />
+    <Stack.Screen name="DeckView" component={DeckView} />
+  </Stack.Navigator>
+);
 const BottomNavigator = () => {
   return (
     <Tab.Navigator
@@ -46,7 +59,7 @@ const BottomNavigator = () => {
         },
       })}
     >
-      <Tab.Screen name="Deck" component={DeckPage} />
+      <Tab.Screen name="Deck" component={DeckStack} />
       <Tab.Screen name="Library" component={Dashboard} />
       <Tab.Screen name="Home" component={Dashboard} />
       <Tab.Screen name="Course" component={Dashboard} />

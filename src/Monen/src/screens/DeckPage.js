@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Image,
@@ -27,6 +27,17 @@ const DeckPage = () => {
     console.log("Menu button pressed!");
   };
 
+  const [searchText, setSearchText] = useState("");
+  const [filteredDecks, setFilteredDecks] = useState(deckData);
+
+  useEffect(() => {
+    // Filter decks based on search text
+    const filtered = deckData.filter((deck) =>
+      deck.deckName.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredDecks(filtered);
+  }, [searchText]);
+
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -36,16 +47,22 @@ const DeckPage = () => {
       />
       <ScrollView contentContainerStyle={styles.body}>
         <View style={styles.topSearch}>
-          <SearchBar placeholder={"Search for a deck"} />
+          <SearchBar
+            placeholder={"Search for a deck"}
+            value={searchText}
+            onChangeText={(text) => setSearchText(text)}
+          />
           <TouchableOpacity onPress={handleMenuPress} style={styles.addButton}>
             <FontAwesomeIcon icon="fa-plus" color={"white"} size={26} />
           </TouchableOpacity>
         </View>
-        <VerticalScrollView
-          data={deckData}
-          renderItem={({ item }) => <DeckCard {...item} />}
-          keyExtractor={(item, index) => index.toString()}
-        />
+        <View>
+          <VerticalScrollView
+            data={filteredDecks}
+            renderItem={({ item }) => <DeckCard {...item} deckData={item} />}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

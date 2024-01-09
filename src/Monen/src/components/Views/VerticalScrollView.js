@@ -4,7 +4,7 @@ import { FlatList, View, StyleSheet } from "react-native";
 const VerticalScrollView = ({ data, renderItem, keyExtractor }) => {
   return (
     <FlatList
-      vertical
+      horizontal={false}
       data={data}
       renderItem={renderItem}
       keyExtractor={keyExtractor}

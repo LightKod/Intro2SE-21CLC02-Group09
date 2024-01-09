@@ -1,6 +1,7 @@
 // StatCard.js
 import React from "react";
 import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import CustomText from "../Text/CustomText/CustomText.index";
 import { dark_gray, white, borderColor } from "../../constants/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -11,10 +12,12 @@ const DeckCard = ({
   userName,
   createDate,
   profilePictureSource,
+  deckData,
 }) => {
+  const navigation = useNavigation();
   const handleCardClick = () => {
     console.log("DeckCard clicked!");
-    // Add any other actions you want to perform on click
+    navigation.navigate("DeckView", { deckData });
   };
 
   return (

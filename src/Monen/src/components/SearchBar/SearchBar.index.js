@@ -3,7 +3,7 @@ import { View, TextInput, StyleSheet } from "react-native";
 import { white, dark_gray, borderColor } from "constants/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
-const SearchBar = ({ placeholder }) => {
+const SearchBar = ({ placeholder, value, onChangeText }) => {
   return (
     <View style={styles.container}>
       <FontAwesomeIcon icon={"fa-search"} color="white" />
@@ -11,6 +11,9 @@ const SearchBar = ({ placeholder }) => {
         style={styles.input}
         placeholder={placeholder}
         placeholderTextColor="grey"
+        value={value}
+        onChangeText={onChangeText}
+        clearButtonMode="while-editing"
       />
     </View>
   );
