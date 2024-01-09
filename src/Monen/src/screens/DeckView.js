@@ -14,13 +14,18 @@ import CardPreview from "components/DeckView/CardPreview";
 import HorizontalScrollView from "components/Views/HorizontalScrollView";
 import { white, dark_gray } from "../constants/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { useNavigation } from "@react-navigation/native";
 
 
 const DeckView = ({ route }) => {
   const { deckData } = route.params;
+  const navigation = useNavigation();
+
   const handBackPress = () => {
     // Add your logic for handling menu button press
     console.log("Back button pressed!");
+    navigation.navigate("DeckPage");
+
   };
   // Use deckData to render the DeckView screen
   const renderItem = ({ item }) => (
@@ -34,7 +39,7 @@ const DeckView = ({ route }) => {
   const onViewCallBack = React.useCallback((viewableItems) => {
     // console.log('Visible items are', viewableItems);
     // Use viewable items in state or as intended
-    console.log(viewableItems.viewableItems[0].index);
+    // console.log(viewableItems.viewableItems[0].index);
     setActiveIndex(viewableItems.viewableItems[0].index + 1);
   }, [])
 
