@@ -6,6 +6,8 @@ import Dashboard from "../screens/Dashboard";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import DeckPage from "../screens/DeckPage";
 import DeckView from "../screens/DeckView";
+import CoursePage from "../screens/CoursePage";
+import CourseDetail from "../screens/CourseDetail";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -22,6 +24,17 @@ const DeckStack = () => (
   >
     <Stack.Screen name="DeckPage" component={DeckPage} />
     <Stack.Screen name="DeckView" component={DeckView} />
+  </Stack.Navigator>
+);
+
+const CourseStack = () => (
+  <Stack.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}
+  >
+    <Stack.Screen name="CoursePage" component={CoursePage} />
+    <Stack.Screen name="CourseDetail" component={CourseDetail} />
   </Stack.Navigator>
 );
 const BottomNavigator = () => {
@@ -62,7 +75,7 @@ const BottomNavigator = () => {
       <Tab.Screen name="Deck" component={DeckStack} />
       <Tab.Screen name="Library" component={Dashboard} />
       <Tab.Screen name="Home" component={Dashboard} />
-      <Tab.Screen name="Course" component={Dashboard} />
+      <Tab.Screen name="Course" component={CourseStack} />
       <Tab.Screen name="Settings" component={Dashboard} />
     </Tab.Navigator>
   );

@@ -29,7 +29,15 @@ const DeckPage = () => {
 
   const [searchText, setSearchText] = useState("");
   const [filteredDecks, setFilteredDecks] = useState(deckData);
-
+  const DeckList = ({ data }) => {
+    return (
+      <React.Fragment>
+        {data.map((item, index) => (
+          <DeckCard key={index} {...item} deckData={item} />
+        ))}
+      </React.Fragment>
+    );
+  };
   useEffect(() => {
     // Filter decks based on search text
     const filtered = deckData.filter((deck) =>
@@ -56,13 +64,7 @@ const DeckPage = () => {
             <FontAwesomeIcon icon="fa-plus" color={"white"} size={26} />
           </TouchableOpacity>
         </View>
-        <View>
-          <VerticalScrollView
-            data={filteredDecks}
-            renderItem={({ item }) => <DeckCard {...item} deckData={item} />}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
+        <DeckList data={filteredDecks} />
       </ScrollView>
     </SafeAreaView>
   );

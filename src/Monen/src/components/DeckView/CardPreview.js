@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import Animated, {
   Easing,
   interpolate,
@@ -48,7 +48,7 @@ const CardPreview = ({ cardFront, cardBack }) => {
   });
 
   return (
-    <View>
+    <View style={styles.container}>
       <TapGestureHandler
         onHandlerStateChange={({ nativeEvent }) => {
           if (nativeEvent.state === State.END) {
@@ -80,9 +80,12 @@ const CardPreview = ({ cardFront, cardBack }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    width: Dimensions.get("window").width,
+  },
   card: {
-    width: 200,
-    height: 300,
+    width: Dimensions.get("window").width - 70,
+    height: 200,
     backgroundColor: dark_gray,
     borderRadius: 10,
     margin: 3,
@@ -105,6 +108,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontFamily: "Montserrat_700Bold",
     color: "white",
+    margin: 10,
   },
 });
 
