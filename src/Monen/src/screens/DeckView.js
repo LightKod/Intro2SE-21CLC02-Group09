@@ -29,6 +29,15 @@ const DeckView = ({ route }) => {
     </View>
   );
 
+  const [activeIndex, setActiveIndex] = React.useState(0);
+
+  const onViewCallBack = React.useCallback((viewableItems) => {
+    // console.log('Visible items are', viewableItems);
+    // Use viewable items in state or as intended
+    console.log(viewableItems.viewableItems[0].index);
+    setActiveIndex(viewableItems.viewableItems[0].index + 1);
+  }, [])
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -36,6 +45,7 @@ const DeckView = ({ route }) => {
           <FontAwesomeIcon icon="fa-arrow-left" color={"white"} size={20} />
         </TouchableOpacity>
         <Text style={styles.deckName}>{deckData.deckName}</Text>
+        <Text style={styles.cardIndex}>Card {activeIndex} / {deckData.cards.length}</Text>
       </View>
       <View style={styles.deckPreview}>
         <FlatList
@@ -47,6 +57,7 @@ const DeckView = ({ route }) => {
           showsHorizontalScrollIndicator={false}
           snapToInterval={Dimensions.get("window").width}
           snapToAlignment="center"
+          onViewableItemsChanged={onViewCallBack}
         />
       </View>
     </SafeAreaView>
@@ -62,7 +73,7 @@ const styles = StyleSheet.create({
     fontFamily: "Montserrat_400Regular",
   },
   deckPreview: {
-    flex: 8,
+    flex: 6,
   },
   backButton: {
     padding: 10,
@@ -79,6 +90,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 0,
     margin: 0,
+  },
+  cardIndex: {
+    color: white,
+    fontSize: 20,
+    position: "absolute",
+    textAlign: "center",
+    alignSelf: "center",
+    marginTop: 70,
   },
   deckName: {
     color: white,
