@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
-import courseData from '../data/courseData';
+import courseData from '../data/courseData';  // Assuming you have imported your courseData
 
-const CourseDetail = ({ route, navigation }) => {
+const CourseDetail = ({ route }) => {
   const { course } = route.params;
-
   const profilePictureSource = require("../assets/tmp.png");
 
   const [activeTab, setActiveTab] = useState('Lessons');
@@ -23,25 +22,22 @@ const CourseDetail = ({ route, navigation }) => {
         <FlatList 
           data={course.decks}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity 
-                style={styles.deck} 
-                onPress={() => console.log("Deck clicked:", item.deckName)}
-              >
-                <Text style={styles.deckTitle}>{item.deckName}</Text>
-                <Text style={styles.deckDescription}>{item.deckDescription}</Text>
-                <View style={styles.footer}>
-                  <View style={styles.creatorInfoContainer}>
-                    {/* Update this to fetch the correct avatar or use a placeholder */}
-                    <Image source={profilePictureSource} style={styles.avatar} />
-                    <Text style={styles.creatorInfo}>{item.userName || 'Unknown'}</Text>
-                  </View>
-                  <Text style={styles.creationDate}>{item.createDate}</Text>
+          renderItem={({ item }) => (
+            <TouchableOpacity 
+              style={styles.deck} 
+              onPress={() => console.log("Deck clicked:", item.deckName)}
+            >
+              <Text style={styles.deckTitle}>{item.deckName}</Text>
+              <Text style={styles.deckDescription}>{item.deckDescription}</Text>
+              <View style={styles.footer}>
+                <View style={styles.creatorInfoContainer}>
+                  <Image source={profilePictureSource} style={styles.avatar} />
+                  <Text style={styles.creatorInfo}>{item.userName || 'Unknown'}</Text>
                 </View>
-              </TouchableOpacity>
-            );
-          }}
+                <Text style={styles.creationDate}>{item.createDate}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
           ListEmptyComponent={<Text>No decks available for this course.</Text>}
         />
       );
@@ -50,8 +46,10 @@ const CourseDetail = ({ route, navigation }) => {
     }
   };
 
-  const renderTabBar = () => {
-    return (
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>{course.courseName}</Text>
+      <Text style={styles.description}>{course.courseDescription}</Text>
       <View style={styles.tabContainer}>
         <TouchableOpacity 
           style={[styles.tabButton, activeTab === 'Lessons' && styles.activeTab]}
@@ -72,14 +70,6 @@ const CourseDetail = ({ route, navigation }) => {
           <Text style={styles.tabText}>Forum</Text>
         </TouchableOpacity>
       </View>
-    );
-  };
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{course.courseName}</Text>
-      <Text style={styles.description}>{course.courseDescription}</Text>
-      {renderTabBar()}
       {renderDecks()}
     </View>
   );
@@ -105,6 +95,25 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     marginBottom: 20,
   },
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  tabButton: {
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  tabText: {
+    color: '#ffffff',
+    fontFamily: "Montserrat_400Regular",
+  },
+  activeTab: {
+    borderBottomWidth: 2,
+    borderBottomColor: '#ffffff',
+    fontWeight: 'bold',
+  },
   deck: {
     marginBottom: 20,
     borderRadius: 10,
@@ -125,12 +134,6 @@ const styles = StyleSheet.create({
     marginBottom: -2,
     color: "#ffffff",
     fontFamily: "Montserrat_700Bold",
-  },
-  courseDescription: {
-    fontSize: 15,
-    marginBottom: 10,
-    color: "#ffffff",
-    fontFamily: "Montserrat_300Light",
   },
   deckDescription: {
     fontSize: 15,
@@ -166,26 +169,6 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontFamily: "Montserrat_300Light",
     marginBottom: -20,
-  },
-  tabContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  tabButton: {
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  tabText: {
-    color: '#ffffff',
-    fontFamily: "Montserrat_400Regular",
-  },
-  activeTab: {
-    borderBottomWidth: 2,
-    borderBottomColor: '#ffffff',
-    fontWeight: 'bold',
   },
 });
 

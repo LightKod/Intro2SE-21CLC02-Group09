@@ -7,8 +7,10 @@ const courseData = [
         createDate: "10/10/2022",
         decks: [
         {
-          deckName: "Deck 1A",
-          deckDescription: "Description for Deck 1A",
+          deckName: "Deck 1",
+          deckDescription: "1 term",
+          userName: "Creator 1",
+          createDate: "12/10/2022",
           cards: [
             { cardFront: "Dolor sit amet", cardBack: "Consectetur adipiscing elit" },
             {
@@ -32,9 +34,35 @@ const courseData = [
         userName: "Creator 2",
         createDate: "11/10/2022",
         decks: [
+          {
+            deckName: "Deck 1",
+            deckDescription: "1 terms",
+            userName: "Creator 1",
+            createDate: "10/10/2022",
+            cards: [
+              { cardFront: "Dolor sit amet", cardBack: "Consectetur adipiscing elit" },
+              {
+                cardFront: "Ut enim ad minim veniam",
+                cardBack: "Sed do eiusmod tempor",
+              },
+              // ... more cards
+            ],
+          },  
+          {
+          deckName: "Deck 2",
+          deckDescription: "3 terms",
+          userName: "Creator 2",
+          createDate: "10/10/2022",
+          cards: [
+            { cardFront: "Dolor sit amet", cardBack: "Consectetur adipiscing elit" },
+            // ... more cards
+          ],
+        },
         {
-          deckName: "Deck 1B",
-          deckDescription: "Description for Deck 1B",
+          deckName: "Deck 3",
+          deckDescription: "1 terms",
+          userName: "Creator 2",
+          createDate: "15/10/2022",
           cards: [
             { cardFront: "Dolor sit amet", cardBack: "Consectetur adipiscing elit" },
             {
