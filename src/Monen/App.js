@@ -8,6 +8,9 @@ import RegisterScreen from "./src/screens/RegisterScreen";
 import ResetPasswordScreen from "./src/screens/ResetPasswordScreen";
 
 // import OtwScreen from "./src/screens/otpWithEmailScreen";
+import OtpScreen from "./src/screens/otpWithEmailScreen";
+import NewPasswordScreen from './src/screens/NewPasswordScreen';
+import SettingScreen from './src/screens/SettingScreen';
 import {
   useFonts,
   Montserrat_400Regular,
@@ -42,8 +45,34 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <BottomNavigator />
-    </NavigationContainer>
+    <Provider >
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="StartScreen"
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="StartScreen" component={StartScreen} />
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
+          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+          <Stack.Screen name="Dashboard" component={Dashboard} />
+          <Stack.Screen name="HomePage" component={BottomNavigator} />
+          <Stack.Screen
+            name="ResetPasswordScreen"
+            component={ResetPasswordScreen}
+          />
+          <Stack.Screen name="OtpScreen" component={OtpScreen} />
+          <Stack.Screen name="NewPasswordScreen" component={NewPasswordScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+})

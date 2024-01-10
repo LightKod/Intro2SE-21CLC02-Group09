@@ -1,8 +1,15 @@
 import React from 'react'
-import { Image, StyleSheet } from 'react-native'
+import { Image, StyleSheet,Pressable } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 
 export default function Logo() {
-  return <Image source={require('../assets/logo.png')} style={styles.image} />
+  const navigation = useNavigation();
+
+  return (
+    <Pressable onPress={()=>{navigation.navigate('HomePage')}}>
+      <Image source={require('../assets/logo.png')} style={styles.image} />
+    </Pressable>
+  )
 }
 
 const styles = StyleSheet.create({

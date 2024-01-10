@@ -18,13 +18,13 @@ export default function ResetPasswordScreen({ navigation }) {
       setEmail({ ...email, error: emailError })
       return
     }
-    navigation.navigate('LoginScreen')
+    navigation.navigate('OtpScreen')
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <BackButton goBack={navigation.goBack} /> */}
-      <BackButton />
+      <BackButton goBack={navigation.goBack} />
+      {/* <BackButton  /> */}
       <Logo />
       <Header>Restore Password</Header>
       <TextInput
@@ -73,10 +73,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     width: '100%',
-    maxWidth: 340,
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: "#000000",
+    fontFamily: "Montserrat_400Regular",
   },
   button:{
     backgroundColor: '#191919',

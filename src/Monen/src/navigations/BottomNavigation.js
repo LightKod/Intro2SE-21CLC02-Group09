@@ -9,6 +9,7 @@ import DeckView from "../screens/DeckView";
 import CoursePage from "../screens/CoursePage";
 import CourseDetail from "../screens/CourseDetail";
 
+import SettingScreen from "../screens/SettingScreen";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const getTabBarIcon =
@@ -76,7 +77,7 @@ const BottomNavigator = () => {
       <Tab.Screen name="Library" component={Dashboard} />
       <Tab.Screen name="Home" component={Dashboard} />
       <Tab.Screen name="Course" component={CourseStack} />
-      <Tab.Screen name="Settings" component={Dashboard} />
+      <Tab.Screen name="Settings" component={SettingScreen} />
     </Tab.Navigator>
   );
 };
