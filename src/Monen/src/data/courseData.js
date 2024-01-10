@@ -36,8 +36,11 @@ const courseData = [
           deckName: "Deck 1B",
           deckDescription: "Description for Deck 1B",
           cards: [
-            { front: "Front 1B1", back: "Back 1B1" },
-            { front: "Front 1B2", back: "Back 1B2" },
+            { cardFront: "Dolor sit amet", cardBack: "Consectetur adipiscing elit" },
+            {
+              cardFront: "Ut enim ad minim veniam",
+              cardBack: "Sed do eiusmod tempor",
+            },
             // ... more cards
           ],
         },
