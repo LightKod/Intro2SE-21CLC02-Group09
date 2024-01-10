@@ -45,8 +45,8 @@ export default function App() {
   }
 
   return (
-    <Provider >
-      <NavigationContainer>
+    <Provider>
+      <NavigationContainer theme={{ colors: { background: "#000" } }}>
         <Stack.Navigator
           initialRouteName="StartScreen"
           screenOptions={{
@@ -63,7 +63,10 @@ export default function App() {
             component={ResetPasswordScreen}
           />
           <Stack.Screen name="OtpScreen" component={OtpScreen} />
-          <Stack.Screen name="NewPasswordScreen" component={NewPasswordScreen} />
+          <Stack.Screen
+            name="NewPasswordScreen"
+            component={NewPasswordScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
