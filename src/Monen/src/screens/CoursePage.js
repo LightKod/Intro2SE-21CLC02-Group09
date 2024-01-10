@@ -13,6 +13,7 @@ import { dark_gray } from "../constants/colors";
 import SearchBar from "../components/SearchBar/SearchBar.index";
 import courseData from "../data/courseData";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { useNavigation } from "@react-navigation/native";
 
 const CoursePage = () => {
   const profilePictureSource = require("../assets/tmp.png");
@@ -30,6 +31,14 @@ const CoursePage = () => {
     );
     setFilteredCourses(filtered);
   }, [searchText]);
+
+  const navigation = useNavigation(); // Navigation hook
+
+  // Function to handle when a course is clicked
+  const handleCourseClick = (course) => {
+    console.log("Course clicked:", course.courseName);
+    navigation.navigate("CourseDetail", { course: course });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -50,7 +59,11 @@ const CoursePage = () => {
           </TouchableOpacity>
         </View>
         {filteredCourses.map((course, index) => (
-          <View key={index} style={styles.courseCard}>
+          <TouchableOpacity 
+            key={index} 
+            style={styles.course} 
+            onPress={() => handleCourseClick(course)} // Using the new function name
+          >
             <Text style={styles.courseTitle}>{course.courseName}</Text>
             <Text style={styles.courseDescription}>{course.courseDescription}</Text>
             <View style={styles.footer}>
@@ -60,7 +73,7 @@ const CoursePage = () => {
               </View>
               <Text style={styles.creationDate}>{course.createDate}</Text>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -94,7 +107,7 @@ const styles = StyleSheet.create({
   body: {
     padding: 15,
   },
-  courseCard: {
+  course: {
     marginBottom: 20,
     borderRadius: 10,
     backgroundColor: "#191919", // Gray background for each course card
