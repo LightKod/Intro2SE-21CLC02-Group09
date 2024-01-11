@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import CustomText from "../Text/CustomText/CustomText.index";
+import CustomText from "../Text/CustomText";
 import { dark_gray } from "constants/colors";
 import { white, yellow } from "../../constants/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";

@@ -10,7 +10,7 @@ import {
 import Header from "../components/Headers/MainHeader";
 import { white, dark_gray } from "../constants/colors";
 import SearchBar from "/components/SearchBar/SearchBar.index";
-import CustomText from "../components/Text/CustomText/CustomText.index";
+import CustomText from "../components/Text/CustomText";
 import UserProgress from "../components/Dashboard/UserProgress";
 import DeckCard from "/components/Card/DeckCard";
 import HorizontalScrollView from "components/Views/HorizontalScrollView";
@@ -23,7 +23,6 @@ const DeckPage = () => {
   const profilePictureSource = require("../assets/tmp.png");
 
   const handleMenuPress = () => {
-    // Add your logic for handling menu button press
     console.log("Menu button pressed!");
   };
 
@@ -65,6 +64,7 @@ const DeckPage = () => {
           </TouchableOpacity>
         </View>
         <DeckList data={filteredDecks} />
+        <View style={styles.deckData}></View>
       </ScrollView>
     </SafeAreaView>
   );
