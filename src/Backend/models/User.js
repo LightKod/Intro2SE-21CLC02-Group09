@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const { v4: uuidv4 } = require('uuid');
 const userSchema = new mongoose.Schema({
     id: { type: String, required: true, unique: true },
     googleId: { type: String},
@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true },
     Decks: { type: Array},
     password: { type: String},
+    publicId : { type: String,default: uuidv4().substring(0,6) },
     address: { type: Array},
     dob: { type: String},
     role: { type: String, default: 'user' },
