@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: Dimensions.get("window").width - 70,
-    height: 200,
+    height: Dimensions.get("window").height - 170,
     backgroundColor: dark_gray,
     borderRadius: 10,
     margin: 3,
