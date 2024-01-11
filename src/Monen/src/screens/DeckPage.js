@@ -18,6 +18,8 @@ import deckData from "../data/deckData";
 import { TouchableOpacity } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import VerticalScrollView from "../components/Views/VerticalScrollView";
+import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DeckPage = () => {
   const profilePictureSource = require("../assets/tmp.png");
@@ -27,7 +29,35 @@ const DeckPage = () => {
   };
 
   const [searchText, setSearchText] = useState("");
-  const [filteredDecks, setFilteredDecks] = useState(deckData);
+  const [filteredDecks, setFilteredDecks] = useState([]);
+  const fetchDeckData = async () => {
+    try {
+      AsyncStorage.getItem("sessionCookie", (error, result) => {
+        if (error) {
+          console.error(error);
+          return;
+        }
+        const sessionCookie = result;
+        console.log(sessionCookie);
+        axios
+          .get("https://flashcard-backend-kuup.onrender.com/decks", {
+            headers: {
+              Cookie: sessionCookie,
+            },
+          })
+          .then((response) => {
+            console.log(response.data);
+            setFilteredDecks(response.data);
+          })
+          .catch((error) => {
+            console.log('Error fetching deck data:', error);
+          });
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+ 
   const DeckList = ({ data }) => {
     return (
       <React.Fragment>
@@ -38,13 +68,17 @@ const DeckPage = () => {
     );
   };
   useEffect(() => {
+    
     // Filter decks based on search text
     const filtered = deckData.filter((deck) =>
       deck.deckName.toLowerCase().includes(searchText.toLowerCase())
     );
     setFilteredDecks(filtered);
   }, [searchText]);
-
+  useEffect(() => {
+    // Fetch deck data on component mount
+    fetchDeckData();
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <Header

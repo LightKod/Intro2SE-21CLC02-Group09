@@ -12,10 +12,29 @@ import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
 import {KeyboardAvoidingView} from 'react-native'
 import SocialGroup from '../components/SocialGroup'
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
+  const [errLogin, setErrLogin] = useState('')
+  const saveCookies = async (cookieHeaderValue) => {
+    if (cookieHeaderValue) {
+      // Concatenate all cookies into a single string
+      const connectSidValue = cookieHeaderValue[0].split(';')[0];
+      console.log(connectSidValue)
 
+      // Save the concatenated string in AsyncStorage
+       await AsyncStorage.setItem('sessionCookie', connectSidValue, (error) => {
+         if (error) {
+           console.error('Error saving sessionCookie:', error);
+         }
+       })
+       
+    }
+  };
+  
   const onLoginPressed = () => {
     const emailError = emailValidator(email.value)
     const passwordError = passwordValidator(password.value)
@@ -24,10 +43,33 @@ export default function LoginScreen({ navigation }) {
       setPassword({ ...password, error: passwordError })
       return
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
+    console.log('aaaaaaaaaaaa')
+    axios.post('https://flashcard-backend-kuup.onrender.com/auth/login', {
+      email: email.value,
+      password: password.value,
     })
+    .then(response => {
+      console.log('testtttt')
+      // Handle successful response
+      console.log('Login success:', response.data);
+      // console.log(response.headers['set-cookie']);
+      // Save the cookies in AsyncStorage
+      saveCookies(response.headers['set-cookie']);
+
+      // Redirect or perform other actions
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'HomePage' }],
+      });
+    })
+    .catch(error => {
+      // Handle error
+      console.error('Login error:', error.response.data);
+      setErrLogin(error.response.data);
+      // Display error message to the user if needed
+      // ...
+    });
+    
   }
 
   return (
@@ -69,6 +111,7 @@ export default function LoginScreen({ navigation }) {
           <Text style={styles.forgot}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>
+      {(errLogin=='') ? null : <Text style={{color: 'red'}}>{errLogin}</Text>}
       <Button mode="contained" style={styles.button} onPress={onLoginPressed}>
         Login
       </Button>

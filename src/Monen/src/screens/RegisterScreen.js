@@ -12,11 +12,28 @@ import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
 import { nameValidator } from '../helpers/nameValidator'
 import { confirmPasswordValidator } from '../helpers/confirmPassword'
+import axios from 'axios'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function RegisterScreen({ navigation }) {
   const [name, setName] = useState({ value: '', error: '' })
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
   const [confirmPassword, setConfirmPassword] = useState({value: '',error: ''})
+  const saveCookies = async (cookieHeaderValue) => {
+    if (cookieHeaderValue) {
+      // Concatenate all cookies into a single string
+      const connectSidValue = cookieHeaderValue[0].split(';')[0];
+      console.log(connectSidValue)
+
+      // Save the concatenated string in AsyncStorage
+       await AsyncStorage.setItem('sessionCookie', connectSidValue, (error) => {
+         if (error) {
+           console.error('Error saving sessionCookie:', error);
+         }
+       })
+       
+    }
+  };
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value)
     const emailError = emailValidator(email.value)
@@ -29,10 +46,32 @@ export default function RegisterScreen({ navigation }) {
       setConfirmPassword({ ...confirmPassword, error: confirmPasswordError })
       return
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
+    axios.post('https://flashcard-backend-kuup.onrender.com/auth/register', {
+      name: name.value,
+      email: email.value,
+      password: password.value
     })
+    .then(response => {
+      console.log('testtttt')
+      // Handle successful response
+      console.log('Login success:', response.data);
+      // console.log(response.headers['set-cookie']);
+      // Save the cookies in AsyncStorage
+      saveCookies(response.headers['set-cookie']);
+
+      // Redirect or perform other actions
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'HomePage' }],
+      });
+    })
+    .catch(error => {
+      // Handle error
+      console.error('Login error:', error.response.data);
+      // setErrLogin(error.response.data);
+      // Display error message to the user if needed
+      // ...
+    });
   }
 
   return (
