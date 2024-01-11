@@ -1,49 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
-import courseData from '../data/courseData';  // Assuming you have imported your courseData
+import React, { useState } from 'react';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  TouchableOpacity, 
+  FlatList, 
+  Image 
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { white } from '../constants/colors'; // Assuming you have defined the white color
 
 const CourseDetail = ({ route }) => {
   const { course } = route.params;
   const profilePictureSource = require("../assets/tmp.png");
+  const navigation = useNavigation();
 
   const [activeTab, setActiveTab] = useState('Lessons');
 
-  useEffect(() => {
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'Lessons':
+        return renderDecks();
+      case 'Members':
+        return renderMembers();
+      case 'Forum':
+        return <Text>Content for Forum tab will go here.</Text>;
+      default:
+        return null;
+    }
+  };
 
-  }, [course]);
+  const renderMembers = () => {
+    if (!course) {
+      return <Text>No course data available.</Text>;
+    }
+    return (
+      <FlatList 
+        data={course.student}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.memberContainer}>
+            <View style={styles.memberItem}>
+              <Text style={styles.memberName}>{item.name}</Text>
+              <Text style={styles.memberClass}>{"Class: " + item.class}</Text>
+            </View>
+          </View>
+        )}
+        ListEmptyComponent={<Text>No members available for this course.</Text>}
+      />
+    );
+  };
 
   const renderDecks = () => {
     if (!course) {
       return <Text>No course data available.</Text>;
     }
-
-    if (activeTab === 'Lessons') {
-      return (
-        <FlatList 
-          data={course.decks}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity 
-              style={styles.deck} 
-              onPress={() => console.log("Deck clicked:", item.deckName)}
-            >
-              <Text style={styles.deckTitle}>{item.deckName}</Text>
-              <Text style={styles.deckDescription}>{item.deckDescription}</Text>
-              <View style={styles.footer}>
-                <View style={styles.creatorInfoContainer}>
-                  <Image source={profilePictureSource} style={styles.avatar} />
-                  <Text style={styles.creatorInfo}>{item.userName || 'Unknown'}</Text>
-                </View>
-                <Text style={styles.creationDate}>{item.createDate}</Text>
+    return (
+      <FlatList 
+        data={course.decks}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <TouchableOpacity 
+            style={styles.deck} 
+            onPress={() => {
+              console.log("Deck clicked:", item.deckName);
+              navigation.navigate('Learn', { deckData: item });
+            }}
+          >
+            <Text style={styles.deckTitle}>{item.deckName}</Text>
+            <Text style={styles.deckDescription}>{item.deckDescription}</Text>
+            <View style={styles.footer}>
+              <View style={styles.creatorInfoContainer}>
+                <Image source={profilePictureSource} style={styles.avatar} />
+                <Text style={styles.creatorInfo}>{item.userName || 'Unknown'}</Text>
               </View>
-            </TouchableOpacity>
-          )}
-          ListEmptyComponent={<Text>No decks available for this course.</Text>}
-        />
-      );
-    } else {
-      return <Text>Content for {activeTab} tab will go here.</Text>;
-    }
+              <Text style={styles.creationDate}>{item.createDate}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
+        ListEmptyComponent={<Text>No decks available for this course.</Text>}
+      />
+    );
   };
 
   return (
@@ -70,7 +107,9 @@ const CourseDetail = ({ route }) => {
           <Text style={styles.tabText}>Forum</Text>
         </TouchableOpacity>
       </View>
-      {renderDecks()}
+      <View style={styles.tabContent}>
+        {renderTabContent()}
+      </View>
     </View>
   );
 };
@@ -169,6 +208,38 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontFamily: "Montserrat_300Light",
     marginBottom: -20,
+  },
+  tabContent: {
+    flex: 1,
+    marginTop: 20,
+  },
+  memberItem: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  memberName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: white,
+  },
+  memberClass: {
+    fontSize: 16,
+    color: '#666',
+  },
+  memberContainer: {
+    backgroundColor: '#191919', // You can adjust the color as per your preference
+    borderRadius: 8,
+    marginBottom: 10, // Space between each member container
+    padding: 10, // Padding inside each member container
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
   },
 });
 

@@ -38,6 +38,7 @@ const CourseStack = () => (
   >
     <Stack.Screen name="CoursePage" component={CoursePage} />
     <Stack.Screen name="CourseDetail" component={CourseDetail} />
+    <Stack.Screen name="Learn" component={DeckLearn} />
   </Stack.Navigator>
 );
 const BottomNavigator = () => {
