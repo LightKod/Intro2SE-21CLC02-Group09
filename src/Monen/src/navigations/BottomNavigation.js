@@ -6,6 +6,7 @@ import Dashboard from "../screens/Dashboard";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import DeckPage from "../screens/DeckPage";
 import DeckView from "../screens/DeckView";
+import DeckLearn from "../screens/Learn";
 import CoursePage from "../screens/CoursePage";
 import CourseDetail from "../screens/CourseDetail";
 
@@ -25,6 +26,7 @@ const DeckStack = () => (
   >
     <Stack.Screen name="DeckPage" component={DeckPage} />
     <Stack.Screen name="DeckView" component={DeckView} />
+    <Stack.Screen name="DeckLearn" component={DeckLearn} />
   </Stack.Navigator>
 );
 

@@ -16,7 +16,6 @@ import { white, dark_gray } from "../constants/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useNavigation } from "@react-navigation/native";
 
-
 const Learn = ({ route }) => {
   const { deckData } = route.params;
   const navigation = useNavigation();
@@ -25,7 +24,6 @@ const Learn = ({ route }) => {
     // Add your logic for handling menu button press
     console.log("Back button pressed!");
     navigation.navigate("DeckPage");
-
   };
   // Use deckData to render the DeckView screen
   const renderItem = ({ item }) => (
@@ -41,7 +39,7 @@ const Learn = ({ route }) => {
     // Use viewable items in state or as intended
     // console.log(viewableItems.viewableItems[0].index);
     setActiveIndex(viewableItems.viewableItems[0].index + 1);
-  }, [])
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -50,7 +48,9 @@ const Learn = ({ route }) => {
           <FontAwesomeIcon icon="fa-arrow-left" color={"white"} size={20} />
         </TouchableOpacity>
         <Text style={styles.deckName}>{deckData.deckName}</Text>
-        <Text style={styles.cardIndex}>Card {activeIndex} / {deckData.cards.length}</Text>
+        <Text style={styles.cardIndex}>
+          Card {activeIndex} / {deckData.cards.length}
+        </Text>
       </View>
       <View style={styles.deckPreview}>
         <FlatList
@@ -111,5 +111,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignSelf: "center",
     marginTop: 30,
-  }
+  },
 });

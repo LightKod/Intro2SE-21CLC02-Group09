@@ -39,7 +39,7 @@ const DeckView = ({ route }) => {
     </View>
   );
   const Learn = () => {
-    //Khoa route o day vo cai cua m lam gium t
+    navigation.navigate("DeckLearn", { deckData });
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -88,7 +88,11 @@ const DeckView = ({ route }) => {
         </View>
         <View style={styles.options}>
           <DeckOption icon={"fa-pencil"} text={"Edit Cards"}></DeckOption>
-          <DeckOption icon={"fa-book"} text={"Learn"}></DeckOption>
+          <DeckOption
+            icon={"fa-book"}
+            text={"Learn"}
+            onPress={Learn}
+          ></DeckOption>
           <DeckOption icon={"fa-gamepad"} text={"Play"}></DeckOption>
           <DeckOption icon={"fa-trash"} text={"Delete"}></DeckOption>
         </View>
