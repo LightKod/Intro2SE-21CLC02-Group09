@@ -5,13 +5,17 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressLayouts = require("express-ejs-layouts");
 require("dotenv").config();
+
+// connect to mongodb
 var connect = require("./config/mongodbconect");
 connect();
+
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
+// import user routers
 const userDeckRouter = require("./components/user/Deck/deck.router");
-
+const userAuthRouter = require("./components/user/Auth/auth.router");
 
 var app = express();
 
@@ -27,11 +31,27 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Passport middleware
+const passport = require("passport");
+const session = require("express-session");
+app.use(
+  session({
+    secret: "Cat",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+require("./config/passportConfig");
+
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-
+//user routers
 app.use('/decks', userDeckRouter);
+app.use('/auth', userAuthRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

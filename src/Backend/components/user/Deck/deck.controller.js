@@ -1,7 +1,7 @@
 const ServiceDeck = require('./deck.service');
 exports.test = async (req, res, next) => {
     try {
-        
+        console.log(req.session)
         const result = await ServiceDeck.test();
         res.status(200).json(result);
     } catch (error) {
