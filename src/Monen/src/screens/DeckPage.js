@@ -19,11 +19,12 @@ import { TouchableOpacity } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import VerticalScrollView from "../components/Views/VerticalScrollView";
 import axios from "axios";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useIsFocused } from "@react-navigation/native";
 
 const DeckPage = () => {
   const profilePictureSource = require("../assets/tmp.png");
-
+  const isFocused = useIsFocused();
   const handleMenuPress = () => {
     console.log("Menu button pressed!");
   };
@@ -50,14 +51,14 @@ const DeckPage = () => {
             setFilteredDecks(response.data);
           })
           .catch((error) => {
-            console.log('Error fetching deck data:', error);
+            console.log("Error fetching deck data:", error);
           });
-      })
+      });
     } catch (error) {
       console.error(error);
     }
-  }
- 
+  };
+
   const DeckList = ({ data }) => {
     return (
       <React.Fragment>
@@ -68,7 +69,6 @@ const DeckPage = () => {
     );
   };
   useEffect(() => {
-    
     // Filter decks based on search text
     const filtered = deckData.filter((deck) =>
       deck.deckName.toLowerCase().includes(searchText.toLowerCase())
@@ -78,7 +78,7 @@ const DeckPage = () => {
   useEffect(() => {
     // Fetch deck data on component mount
     fetchDeckData();
-  }, []);
+  }, [isFocused]);
   return (
     <SafeAreaView style={styles.container}>
       <Header

@@ -7,10 +7,10 @@ import { dark_gray, white, borderColor } from "../../constants/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 const DeckCard = ({
-  deckName,
-  deckDescription,
-  userName,
-  createDate,
+  title,
+  description,
+  creatorId,
+  createdAt,
   profilePictureSource,
   deckData,
 }) => {
@@ -19,13 +19,17 @@ const DeckCard = ({
     console.log("DeckCard clicked!");
     navigation.navigate("DeckView", { deckData });
   };
+  const formatDate = (date) => {
+    const options = { year: "numeric", month: "numeric", day: "numeric" };
+    return new Date(date).toLocaleDateString("en-US", options);
+  };
 
   return (
     <TouchableOpacity activeOpacity={0.7} onPress={handleCardClick}>
       <View style={styles.card}>
         <View style={styles.contentContainer}>
-          <CustomText style={styles.topLeftText}>{deckName}</CustomText>
-          <CustomText style={styles.bodyText}>{deckDescription}</CustomText>
+          <CustomText style={styles.topLeftText}>{title}</CustomText>
+          <CustomText style={styles.bodyText}>{description}</CustomText>
         </View>
         <View style={styles.bottomRow}>
           <View style={styles.creatorContainer}>
@@ -33,9 +37,11 @@ const DeckCard = ({
               source={profilePictureSource}
               style={styles.profilePicture}
             />
-            <CustomText style={styles.userNameText}>{userName}</CustomText>
+            <CustomText style={styles.userNameText}>{creatorId}</CustomText>
           </View>
-          <CustomText style={styles.dateText}>{createDate}</CustomText>
+          <CustomText style={styles.dateText}>
+            {formatDate(new Date(createdAt))}
+          </CustomText>
         </View>
       </View>
     </TouchableOpacity>
