@@ -9,7 +9,7 @@ const CourseDetail = ({ route }) => {
   const [activeTab, setActiveTab] = useState('Lessons');
 
   useEffect(() => {
-    console.log('Current Course:', course);
+
   }, [course]);
 
   const renderDecks = () => {
