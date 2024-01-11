@@ -9,7 +9,8 @@ require("dotenv").config();
 // connect to mongodb
 var connect = require("./config/mongodbconect");
 connect();
-
+// ADD THIS
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -18,6 +19,7 @@ const userDeckRouter = require("./components/user/Deck/deck.router");
 const userAuthRouter = require("./components/user/Auth/auth.router");
 
 var app = express();
+app.use(cors())
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

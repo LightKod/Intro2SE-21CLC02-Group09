@@ -8,6 +8,8 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cookie-parser": "~1.4.4",
+    "cor": "^0.0.0",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
@@ -20,7 +22,8 @@
     "nodemailer": "^6.9.8",
     "passport": "^0.7.0",
     "passport-google-oidc": "^0.1.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
