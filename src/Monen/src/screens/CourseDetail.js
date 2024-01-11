@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
-  FlatList, 
-  Image 
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Modal, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { white } from '../constants/colors'; // Assuming you have defined the white color
 
 const CourseDetail = ({ route }) => {
   const { course } = route.params;
   const profilePictureSource = require("../assets/tmp.png");
   const navigation = useNavigation();
-
+  const [modalVisible, setModalVisible] = useState(false);
   const [activeTab, setActiveTab] = useState('Lessons');
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -34,6 +30,7 @@ const CourseDetail = ({ route }) => {
     if (!course) {
       return <Text>No course data available.</Text>;
     }
+
     return (
       <FlatList 
         data={course.student}
@@ -55,6 +52,7 @@ const CourseDetail = ({ route }) => {
     if (!course) {
       return <Text>No course data available.</Text>;
     }
+
     return (
       <FlatList 
         data={course.decks}
@@ -85,8 +83,6 @@ const CourseDetail = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{course.courseName}</Text>
-      <Text style={styles.description}>{course.courseDescription}</Text>
       <View style={styles.tabContainer}>
         <TouchableOpacity 
           style={[styles.tabButton, activeTab === 'Lessons' && styles.activeTab]}
@@ -107,9 +103,37 @@ const CourseDetail = ({ route }) => {
           <Text style={styles.tabText}>Forum</Text>
         </TouchableOpacity>
       </View>
+
       <View style={styles.tabContent}>
         {renderTabContent()}
       </View>
+
+      {/* Plus Icon at Bottom Center */}
+      <View style={styles.bottomIconContainer}>
+        <TouchableOpacity style={styles.bottomIcon} onPress={toggleModal}>
+          <Text style={styles.plusIcon}>+</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          toggleModal();
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text>Enter Information:</Text>
+            {/* Add your form or any other input components here */}
+            <TouchableOpacity onPress={toggleModal}>
+              <Text>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -221,17 +245,17 @@ const styles = StyleSheet.create({
   memberName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: white,
+    color: 'white',
   },
   memberClass: {
     fontSize: 16,
     color: '#666',
   },
   memberContainer: {
-    backgroundColor: '#191919', // You can adjust the color as per your preference
+    backgroundColor: '#191919',
     borderRadius: 8,
-    marginBottom: 10, // Space between each member container
-    padding: 10, // Padding inside each member container
+    marginBottom: 10,
+    padding: 10,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -240,6 +264,41 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
+  },
+  bottomIconContainer: {
+    position: 'absolute',
+    bottom: 20,
+    width: '100%',
+    alignItems: 'center',
+  },
+  bottomIcon: {
+    backgroundColor: '#333',
+    padding: 15,
+    borderRadius: 50,
+  },
+  plusIcon: {
+    fontSize: 24,
+    color: 'white',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
   },
 });
 
