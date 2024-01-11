@@ -84,6 +84,7 @@ const Learn = ({ route }) => {
             handleRightDecay();
           } else {
             setCurrentIndex(prevIndex => prevIndex + 1);
+
             handleLeftDecay();
           }
         } else {
@@ -123,9 +124,13 @@ const Learn = ({ route }) => {
 
 
   useEffect(() => {
-    console.log(currentIndex);
     if (currentIndex === length) {
-      navigation.navigate("DeckView", { deckData });
+      setCurrentIndex(0);
+      setData(
+        (data) => {
+          return [...data, ...deckData.cards];
+        }
+      );
     }
   }, [currentIndex]);
 
