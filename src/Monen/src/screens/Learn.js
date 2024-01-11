@@ -23,7 +23,7 @@ const Learn = ({ route }) => {
   const handBackPress = () => {
     // Add your logic for handling menu button press
     console.log("Back button pressed!");
-    navigation.navigate("DeckPage");
+    navigation.navigate("DeckView", { deckData });
   };
   // Use deckData to render the DeckView screen
   const renderItem = ({ item }) => (
