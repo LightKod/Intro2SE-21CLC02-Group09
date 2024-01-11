@@ -1,5 +1,5 @@
 // DeckView.js
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -7,109 +7,213 @@ import {
   StyleSheet,
   FlatList,
   Dimensions,
-  Button,
   TouchableOpacity,
+  PanResponder,
+  Animated,
 } from "react-native";
-import CardPreview from "components/DeckView/CardPreview";
-import HorizontalScrollView from "components/Views/HorizontalScrollView";
-import { white, dark_gray } from "../constants/colors";
+import { useRef } from "react";
+import Card from "../components/Learn/Card";
+import { white, dark_gray, borderColor } from "../constants/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useNavigation } from "@react-navigation/native";
+const { width, height } = Dimensions.get('screen');
+const SWIPE_THRESHOLD = 0.25 * width;
+
+
 
 const Learn = ({ route }) => {
   const { deckData } = route.params;
   const navigation = useNavigation();
+  const length = deckData.cards.length;
+
+  const [data, setData] = React.useState(deckData.cards);
 
   const handBackPress = () => {
     // Add your logic for handling menu button press
     console.log("Back button pressed!");
     navigation.navigate("DeckView", { deckData });
   };
-  // Use deckData to render the DeckView screen
-  const renderItem = ({ item }) => (
-    <View style={{ width: Dimensions.get("window").width }}>
-      <CardPreview {...item} />
-    </View>
-  );
 
-  const [activeIndex, setActiveIndex] = React.useState(0);
 
-  const onViewCallBack = React.useCallback((viewableItems) => {
-    // console.log('Visible items are', viewableItems);
-    // Use viewable items in state or as intended
-    // console.log(viewableItems.viewableItems[0].index);
-    setActiveIndex(viewableItems.viewableItems[0].index + 1);
-  }, []);
+
+  const animation = useRef(new Animated.ValueXY()).current;
+  const opacity = useRef(new Animated.Value(1)).current;
+  const scale = useRef(new Animated.Value(0.9)).current;
+
+  const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+
+  const handleRightDecay = () => {
+    console.log("Done")
+    // navigation.navigate("DeckView", { deckData });
+  }
+
+  const handleLeftDecay = () => {
+    console.log("Fail");
+  }
+
+  const _panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (event, gesture) => {
+        animation.setValue({ x: gesture.dx, y: gesture.dy });
+      },
+      onPanResponderRelease: (e, { dx, dy, vx, vy }) => {
+        let velocity;
+        if (vx >= 0) {
+          velocity = clamp(vx, 4, 5);
+        } else if (vx < 0) {
+          velocity = clamp(Math.abs(vx), 4, 5) * -1;
+        }
+        if (Math.abs(dx) > SWIPE_THRESHOLD) {
+          Animated.parallel([
+            Animated.decay(animation, {
+              velocity: { x: velocity, y: vy },
+              deceleration: 0.99,
+              useNativeDriver: false,
+            }),
+            Animated.spring(scale, {
+              toValue: 1,
+              friction: 4,
+              useNativeDriver: false,
+            }),
+          ]).start(transitionNext);
+          if (velocity > 0) {
+            setCurrentIndex(prevIndex => prevIndex + 1);
+            handleRightDecay();
+          } else {
+            setCurrentIndex(prevIndex => prevIndex + 1);
+            handleLeftDecay();
+          }
+        } else {
+          Animated.spring(animation, {
+            toValue: { x: 0, y: 0 },
+            friction: 4,
+            useNativeDriver: false,
+          }).start();
+        }
+      },
+    })).current;
+
+  const transitionNext = function () {
+    Animated.parallel([
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: false,
+      }),
+      Animated.spring(scale, {
+        toValue: 1,
+        friction: 4,
+        useNativeDriver: false,
+      }),
+    ]).start(() => {
+      setData((data) => {
+        return data.slice(1)
+      })
+    });
+  };
+
+  useEffect(() => {
+    scale.setValue(0.9);
+    opacity.setValue(1);
+    animation.setValue({ x: 0, y: 0 });
+  }, [data]);
+
+
+  useEffect(() => {
+    console.log(currentIndex);
+    if (currentIndex === length) {
+      navigation.navigate("DeckView", { deckData });
+    }
+  }, [currentIndex]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView>
       <View style={styles.header}>
-        <TouchableOpacity onPress={handBackPress} style={styles.backButton}>
-          <FontAwesomeIcon icon="fa-arrow-left" color={"white"} size={20} />
+        <TouchableOpacity onPress={handBackPress}>
+          <FontAwesomeIcon icon="fa-arrow-left" color={white} size={26} />
         </TouchableOpacity>
         <Text style={styles.deckName}>{deckData.deckName}</Text>
-        <Text style={styles.cardIndex}>
-          Card {activeIndex} / {deckData.cards.length}
-        </Text>
+        <Text style={styles.deckIndex}>{currentIndex + 1} / {deckData.cards.length}</Text>
       </View>
-      <View style={styles.deckPreview}>
-        <FlatList
-          data={deckData.cards}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          snapToInterval={Dimensions.get("window").width}
-          snapToAlignment="center"
-          onViewableItemsChanged={onViewCallBack}
-        />
+      <View style={styles.cardHolder}>
+        {
+          data
+            .slice(0, 2)
+            .reverse()
+            .map((item, index, items) => {
+              // check if it's top card
+              const isLastItem = index === items.length - 1;
+              // apply panHandlers if it's top card
+              const panHandlers = isLastItem ? { ..._panResponder.panHandlers } : {};
+              // check if it's next card
+              const isSecondToLast = index === items.length - 2;
+              // rotate from -30 degree to +30 degree for swipe distance of -200 to +200
+              const rotate = animation.x.interpolate({
+                inputRange: [-200, 0, 200],
+                outputRange: ['-30deg', '0deg', '30deg'],
+                extrapolate: 'clamp', // make sure the rotation doesn't go beyong 30 degrees.
+              });
+              // prepare card styles
+              const animatedCardStyles = {
+                transform: [{ rotate }, ...animation.getTranslateTransform()],
+                opacity,
+              };
+              const cardStyle = isLastItem ? animatedCardStyles : undefined;
+              const nextStyle = isSecondToLast
+                ? { transform: [{ scale: scale }], borderRadius: 5, }
+                : undefined;
+              return (
+                <Animated.View
+                  {...panHandlers}
+                  style={[styles.card, cardStyle, nextStyle]}
+                  key={index}>
+                  <Card {...item} />
+                </Animated.View>
+              );
+            })
+        }
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 
 export default Learn;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000000",
-    fontFamily: "Montserrat_400Regular",
-  },
-  deckPreview: {
-    flex: 6,
-  },
-  backButton: {
-    padding: 10,
-    borderRadius: 10,
-    width: 50,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: dark_gray,
-    marginLeft: 20,
-    marginTop: 20,
-  },
   header: {
-    flex: 1,
-    padding: 0,
-    margin: 0,
-  },
-  cardIndex: {
-    color: white,
-    fontSize: 20,
     position: "absolute",
-    textAlign: "center",
-    alignSelf: "center",
-    marginTop: 70,
+    top: 20,
+    left: 20,
+    width: width - 40,
+    height: 100,
   },
   deckName: {
     color: white,
-    fontSize: 25,
-    position: "absolute",
+    fontSize: 24,
+    fontFamily: "Montserrat_700Bold",
+    justifyContent: "center",
+    alignItems: "center",
     textAlign: "center",
-    alignSelf: "center",
-    marginTop: 30,
   },
+  deckIndex: {
+    color: white,
+    fontSize: 24,
+    fontFamily: "Montserrat_700Bold",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+  },
+  cardHolder: {
+    marginTop: 120,
+    marginLeft: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  card: {
+    width: '100%',
+    position: 'absolute',
+  }
 });
