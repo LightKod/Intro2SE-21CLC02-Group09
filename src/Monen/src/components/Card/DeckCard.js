@@ -2,7 +2,7 @@
 import React from "react";
 import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import CustomText from "../Text/CustomText/CustomText.index";
+import CustomText from "../Text/CustomText";
 import { dark_gray, white, borderColor } from "../../constants/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 

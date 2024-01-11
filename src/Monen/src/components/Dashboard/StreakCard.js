@@ -1,7 +1,7 @@
 // StreakCard.js
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import CustomText from "../Text/CustomText/CustomText.index";
+import CustomText from "../Text/CustomText";
 import { yellow, dark_gray, white, borderColor } from "../../constants/colors";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 

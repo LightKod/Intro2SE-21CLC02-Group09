@@ -12,7 +12,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { TapGestureHandler, State } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
-import CustomText from "../Text/CustomText/CustomText.index";
+import CustomText from "../Text/CustomText";
 import { dark_gray, borderColor } from "../../constants/colors";
 
 const CardPreview = ({ cardFront, cardBack }) => {
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
   },
   card: {
-    width: Dimensions.get("window").width - 70,
+    width: Dimensions.get("window").width - 40,
     height: 200,
     backgroundColor: dark_gray,
     borderRadius: 10,
