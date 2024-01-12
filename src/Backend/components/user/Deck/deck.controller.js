@@ -10,11 +10,19 @@ exports.test = async (req, res, next) => {
 }
 exports.getAllDeck = async (req, res, next) => {
     try {
+        const result = await ServiceDeck.getAllDeck();
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(400).json(error);
+    }
+}
+exports.getAllUserDeck = async (req, res, next) => {
+    try {
         if(!req.user)
         {
             res.status(400).send('user not found');
         }
-        const result = await ServiceDeck.getAllDeck(req.user);
+        const result = await ServiceDeck.getAllUserDeck(req.user);
         res.status(200).json(result);
     } catch (error) {
         console.log(error)

@@ -9,7 +9,13 @@ exports.test = async () => {
     })
     return foundDecks
 }
-exports.getAllDeck = async (user) => {
+exports.getAllDeck = async () => {
+    const foundDecks = await Deck.find({
+    // isActive: true,
+    })
+    return foundDecks
+}
+exports.getAllUserDeck = async (user) => {
     if(user)
     {
         console.log(typeof(user.Decks))
