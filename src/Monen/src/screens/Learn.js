@@ -111,7 +111,9 @@ const Learn = ({ route }) => {
       }),
     ]).start(() => {
       setData((data) => {
-        return data.slice(1)
+        if (data.length === 2)
+          data = [...data, ...deckData.cards];
+        return data.slice(1);
       })
     });
   };
@@ -126,11 +128,11 @@ const Learn = ({ route }) => {
   useEffect(() => {
     if (currentIndex === length) {
       setCurrentIndex(0);
-      setData(
-        (data) => {
-          return [...data, ...deckData.cards];
-        }
-      );
+      // setData(
+      //   (data) => {
+      //     return [...data, ...deckData.cards];
+      //   }
+      // );
     }
   }, [currentIndex]);
 
@@ -141,7 +143,7 @@ const Learn = ({ route }) => {
           <FontAwesomeIcon icon="fa-arrow-left" color={white} size={26} />
         </TouchableOpacity>
         <Text style={styles.deckName}>{deckData.deckName}</Text>
-        <Text style={styles.deckIndex}>{currentIndex + 1} / {deckData.cards.length}</Text>
+        <Text style={styles.deckIndex}>{length === 0 ? 0 : currentIndex + 1} / {deckData.cards.length}</Text>
       </View>
       <View style={styles.cardHolder}>
         {
