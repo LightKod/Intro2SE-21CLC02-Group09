@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import CustomText from "../Text/CustomText";
 import { dark_gray, borderColor } from "../../constants/colors";
 
-const CardPreview = ({ cardFront, cardBack }) => {
+const CardPreview = ({ question, answer }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const rotation = useSharedValue(0);
 
@@ -58,7 +58,7 @@ const CardPreview = ({ cardFront, cardBack }) => {
       >
         <Animated.View style={[styles.card, frontCardStyle]}>
           <View style={styles.side}>
-            <CustomText style={styles.cardText}>{cardFront}</CustomText>
+            <CustomText style={styles.cardText}>{question}</CustomText>
           </View>
         </Animated.View>
       </TapGestureHandler>
@@ -71,7 +71,7 @@ const CardPreview = ({ cardFront, cardBack }) => {
       >
         <Animated.View style={[styles.cardBack, backCardStyle, styles.card]}>
           <View style={styles.side}>
-            <CustomText style={styles.cardText}>{cardBack}</CustomText>
+            <CustomText style={styles.cardText}>{answer}</CustomText>
           </View>
         </Animated.View>
       </TapGestureHandler>

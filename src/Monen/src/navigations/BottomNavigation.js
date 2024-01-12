@@ -11,6 +11,7 @@ import CoursePage from "../screens/CoursePage";
 import CourseDetail from "../screens/CourseDetail";
 
 import SettingScreen from "../screens/SettingScreen";
+import CardListEdit from "../screens/CardListEdit";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const getTabBarIcon =
@@ -27,6 +28,7 @@ const DeckStack = () => (
     <Stack.Screen name="DeckPage" component={DeckPage} />
     <Stack.Screen name="DeckView" component={DeckView} />
     <Stack.Screen name="DeckLearn" component={DeckLearn} />
+    <Stack.Screen name="CardListEdit" component={CardListEdit} />
   </Stack.Navigator>
 );
 

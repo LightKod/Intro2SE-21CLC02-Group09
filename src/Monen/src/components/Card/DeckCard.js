@@ -13,13 +13,17 @@ const DeckCard = ({
   createdAt,
   profilePictureSource,
   deckData,
+  setDeckData,
 }) => {
   const navigation = useNavigation();
   const handleCardClick = () => {
     console.log("DeckCard clicked!");
-    navigation.navigate("DeckView", { deckData });
+    navigation.navigate("DeckView", { deckData, setDeckData });
   };
   const formatDate = (date) => {
+    if (Number.isInteger(date)) {
+      date = new Date(date);
+    }
     const options = { year: "numeric", month: "numeric", day: "numeric" };
     return new Date(date).toLocaleDateString("en-US", options);
   };

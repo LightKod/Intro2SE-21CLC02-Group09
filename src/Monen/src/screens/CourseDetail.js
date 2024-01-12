@@ -12,7 +12,6 @@ const CourseDetail = ({ route }) => {
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
-
   const renderTabContent = () => {
     switch (activeTab) {
       case 'Lessons':
@@ -61,18 +60,18 @@ const CourseDetail = ({ route }) => {
           <TouchableOpacity 
             style={styles.deck} 
             onPress={() => {
-              console.log("Deck clicked:", item.deckName);
+              console.log("Deck clicked:", item.title);
               navigation.navigate('Learn', { deckData: item });
             }}
           >
-            <Text style={styles.deckTitle}>{item.deckName}</Text>
-            <Text style={styles.deckDescription}>{item.deckDescription}</Text>
+            <Text style={styles.deckTitle}>{item.title}</Text>
+            <Text style={styles.deckDescription}>{item.description}</Text>
             <View style={styles.footer}>
               <View style={styles.creatorInfoContainer}>
                 <Image source={profilePictureSource} style={styles.avatar} />
                 <Text style={styles.creatorInfo}>{item.userName || 'Unknown'}</Text>
               </View>
-              <Text style={styles.creationDate}>{item.createDate}</Text>
+              <Text style={styles.creationDate}>{item.createdAt}</Text>
             </View>
           </TouchableOpacity>
         )}

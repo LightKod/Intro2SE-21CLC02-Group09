@@ -2,18 +2,25 @@ import React from "react";
 import { View, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import CustomText from "components/Text/CustomText"; // Import your custom text component
-import { white } from "constants/colors";
+import { white, disableBackground, disableWhite } from "constants/colors";
+import { dark_gray } from "../../constants/colors";
 
-const DeckOption = ({ icon, text, onPress }) => {
+const DeckOption = ({ icon, text, onPress, disabled }) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.container, disabled && styles.disabledContainer]}
+      onPress={onPress}
+      disabled={disabled}
+    >
       <FontAwesomeIcon
         icon={icon}
         color={white}
         size={20}
-        style={styles.icon}
+        style={[styles.icon, disabled && styles.disabledIcon]}
       />
-      <CustomText style={styles.text}>{text}</CustomText>
+      <CustomText style={[styles.text, disabled && styles.disabledText]}>
+        {text}
+      </CustomText>
     </TouchableOpacity>
   );
 };
@@ -27,16 +34,25 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
-    backgroundColor: "#1E1E1E", // Set your desired background color
+    backgroundColor: dark_gray, // Set your desired background color
     marginVertical: 5,
     height: 50,
   },
+  disabledContainer: {
+    backgroundColor: disableBackground, // Set the background color for disabled state
+  },
   icon: {
     marginRight: 10,
+  },
+  disabledIcon: {
+    color: disableWhite, // Set the color for the icon in disabled state
   },
   text: {
     fontSize: 18,
     color: white,
     fontFamily: "Montserrat_700Bold",
+  },
+  disabledText: {
+    color: disableWhite, // Set the color for the text in disabled state
   },
 });

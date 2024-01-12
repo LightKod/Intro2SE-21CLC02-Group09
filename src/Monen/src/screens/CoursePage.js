@@ -14,31 +14,108 @@ import SearchBar from "../components/SearchBar/SearchBar.index";
 import courseData from "../data/courseData";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useNavigation } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const CoursePage = () => {
   const profilePictureSource = require("../assets/tmp.png");
-
+  const isFocused = useIsFocused();
+  const [courseData, setCourseData] = useState([]);
   const handleMenuPress = () => {
     console.log("Menu button pressed!");
   };
 
   const [searchText, setSearchText] = useState("");
-  const [filteredCourses, setFilteredCourses] = useState(courseData);
+  const [filteredCourses, setFilteredCourses] = useState([]);
+
+  const fetchCourseData = async () => {
+    try {
+      AsyncStorage.getItem("sessionCookie", (error, result) => {
+        if (error) {
+          console.error(error);
+          return;
+        }
+        const sessionCookie = result;
+        console.log(sessionCookie);
+        axios
+          .get("https://flashcard-backend-kuup.onrender.com/courses", {
+            headers: {
+              Cookie: sessionCookie,
+            },
+          })
+          .then((response) => {
+            console.log(response.data.length);
+            setCourseData(response.data);
+            setFilteredCourses(response.data);
+            setSearchText("");
+          })
+          .catch((error) => {
+            console.log("Error fetching deck data:", error);
+          });
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  async function CreateNewCourse() {
+    try {
+      AsyncStorage.getItem("sessionCookie", (error, result) => {
+        if (error) {
+          console.error(error);
+          return;
+        }
+        const sessionCookie = result;
+        console.log(sessionCookie);
+        const newDeckData = {
+          title: "Course title",
+          description: "Course description",
+          decks: [],
+          studentID: [],
+        };
+        axios
+          .post(
+            "https://flashcard-backend-kuup.onrender.com/courses/create",
+            newDeckData,
+            {
+              headers: {
+                Cookie: sessionCookie,
+              },
+            }
+          )
+          .then((response) => {
+            console.log("Deck created successfully:", response.data);
+            setCourseData([...courseData, response.data]);
+          })
+          .catch((error) => {
+            console.error("Error creating deck:", error.response.data);
+          });
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
     const filtered = courseData.filter((course) =>
-      course.courseName.toLowerCase().includes(searchText.toLowerCase())
+      course.title.toLowerCase().includes(searchText.toLowerCase())
     );
     setFilteredCourses(filtered);
-  }, [searchText]);
+  }, [searchText, courseData]);
 
   const navigation = useNavigation(); // Navigation hook
 
   // Function to handle when a course is clicked
   const handleCourseClick = (course) => {
-    console.log("Course clicked:", course.courseName);
+    console.log("Course clicked:", course.title);
     navigation.navigate("CourseDetail", { course: course });
   };
+
+  useEffect(() => {
+    // Fetch course data on component mount
+      fetchCourseData();
+    }, [isFocused]);  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,7 +131,7 @@ const CoursePage = () => {
             value={searchText}
             onChangeText={(text) => setSearchText(text)}
           />
-          <TouchableOpacity onPress={handleMenuPress} style={styles.addButton}>
+          <TouchableOpacity onPress={CreateNewCourse} style={styles.addButton}>
             <FontAwesomeIcon icon="fa-plus" color={"white"} size={26} />
           </TouchableOpacity>
         </View>
@@ -64,8 +141,8 @@ const CoursePage = () => {
             style={styles.course} 
             onPress={() => handleCourseClick(course)} // Using the new function name
           >
-            <Text style={styles.courseTitle}>{course.courseName}</Text>
-            <Text style={styles.courseDescription}>{course.courseDescription}</Text>
+            <Text style={styles.courseTitle}>{course.title}</Text>
+            <Text style={styles.description}>{course.description}</Text>
             <View style={styles.footer}>
               <View style={styles.creatorInfoContainer}>
                 <Image source={profilePictureSource} style={styles.avatar} />
@@ -129,7 +206,7 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontFamily: "Montserrat_700Bold",
   },
-  courseDescription: {
+  description: {
     fontSize: 15,
     marginBottom: 10,
     color: "#ffffff",
