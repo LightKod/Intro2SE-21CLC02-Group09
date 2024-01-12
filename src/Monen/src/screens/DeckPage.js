@@ -107,7 +107,7 @@ const DeckPage = () => {
             key={index}
             {...item}
             deckData={item}
-            setDeckData={setDeckData}
+            setDeckData={setDeckData} 
           />
         ))}
       </React.Fragment>
