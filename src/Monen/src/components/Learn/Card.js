@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Dimensions, Text } from "react-native";
 import { white, dark_gray, borderColor } from "../../constants/colors";
 
-const Card = ({ cardFront, cardBack }) => {
+const Card = ({ question, answer }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.cardText}>
-                {cardFront}: {cardBack}
+                {question}: {answer}
             </Text>
         </View>
     )
