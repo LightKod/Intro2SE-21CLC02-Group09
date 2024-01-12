@@ -34,7 +34,7 @@ exports.createCourse = async (userId,course) => {
 exports.addDeck = async (userId,deckId,courseId) => {
     try
     {
-        const course = await Course.findOne({ 'courseId': courseId });
+        const course = await Course.findOne({ courseId: courseId });
         if(course == null)
         {
             throw new Error('course not found')
@@ -55,7 +55,7 @@ exports.addDeck = async (userId,deckId,courseId) => {
 exports.addUser = async (userId,courseId,creatorId) => {
     try
     {
-        const course = await Course.findOne({ 'courseId': courseId });
+        const course = await Course.findOne({ courseId: courseId });
         if(course == null)
         {
             throw new Error('course not found')
@@ -76,7 +76,7 @@ exports.addUser = async (userId,courseId,creatorId) => {
 exports.removeUser = async (userId,courseId,creatorId) => {
     try
     {
-        const course = await Course.findOne({ 'courseId': courseId });
+        const course = await Course.findOne({ courseId: courseId });
         if(course == null)
         {
             throw new Error('course not found')
@@ -97,7 +97,7 @@ exports.removeUser = async (userId,courseId,creatorId) => {
 exports.removeDeck = async (deckId,courseId,creatorId) => {
     try
     {
-        const course = await Course.findOne({ 'courseId': courseId });
+        const course = await Course.findOne({ courseId: courseId });
         if(course == null)
         {
             throw new Error('course not found')
@@ -118,7 +118,7 @@ exports.removeDeck = async (deckId,courseId,creatorId) => {
 exports.getUsers = async (courseId) => {
     try
     {
-        const course = await Course.findOne({ 'courseId': courseId });
+        const course = await Course.findOne({ courseId: courseId });
         if(course == null)
         {
             throw new Error('course not found')
@@ -132,6 +132,28 @@ exports.getUsers = async (courseId) => {
             }
         })
         return result
+    }
+    catch(error)
+    {
+        throw new Error(error)
+    }
+}
+exports.updateCourse = async (courseInfo,creatorId) => {
+    try
+    {
+        const course = await Course.findOne({ courseId: courseInfo.courseId });
+        if(course == null)
+        {
+            throw new Error('course not found')
+        }
+        if(course.creatorId != creatorId)
+        {
+            throw new Error('user does not have permission')
+        }
+        course.title = course.title
+        course.description = course.description
+        await course.save()
+        return course
     }
     catch(error)
     {

@@ -1,7 +1,7 @@
-async function toggleSetStatus(setId, isActive) {
+async function toggleSetStatus(setId, isActive,name) {
   try {
     const response = await fetch(
-      `/admin/set/${isActive ? "enable" : "disable"}/${setId}`,
+      `/admin/${name}/${isActive ? "enable" : "disable"}/${setId}`,
       {
         method: "PUT",
         headers: {
@@ -22,17 +22,17 @@ async function toggleSetStatus(setId, isActive) {
   }
 }
 
-async function deleteSet(setId) {
+async function deleteSet(setId,name) {
   displayErrorModal(
     "Confirm",
     "Are you sure you want to delete this set?",
-    () => ConfirmDelete(setId)
+    () => ConfirmDelete(setId,name)
   );
 }
 
-async function ConfirmDelete(setId) {
+async function ConfirmDelete(setId,name) {
   try {
-    const response = await fetch(`/admin/set/delete/${setId}`, {
+    const response = await fetch(`/admin/${name}/delete/${setId}`, {
       method: "DELETE",
     });
 
