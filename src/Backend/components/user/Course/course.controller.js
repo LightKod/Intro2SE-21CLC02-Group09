@@ -76,7 +76,7 @@ exports.removeDeck = async (req, res, next) => {
 exports.getUsers = async (req, res, next) => {
     try
     {
-        const courseId = req.body.courseId
+        const courseId = req.params.courseId
         const creatorId = req.user.id
         const result = await ServiceCourse.getUsers(courseId,creatorId)
         res.status(200).json(result);
@@ -103,6 +103,7 @@ exports.getAllDeck = async (req, res, next) => {
     try
     {
         const courseId = req.params.courseId
+        const creatorId = req.user.id
         const result = await ServiceCourse.getAllDeck(courseId,creatorId)
         res.status(200).json(result);
     }
