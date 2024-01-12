@@ -1,5 +1,5 @@
 // DeckView.js
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  LogBox,
 } from "react-native";
 import CardPreview from "components/DeckView/CardPreview";
 import { useNavigation } from "@react-navigation/native";
@@ -19,15 +20,86 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { white, dark_gray } from "constants/colors";
 import CustomText from "components/Text/CustomText";
 import DeckOption from "components/DeckView/DeckOption";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ScrollView } from "react-native-gesture-handler";
+import axios from "axios";
 
+LogBox.ignoreLogs([
+  "Non-serializable values were found in the navigation state",
+]);
 const DeckView = ({ route }) => {
   const profilePictureSource = require("../assets/tmp.png");
-  const { deckData } = route.params;
+  const { setDeckData, deckData } = route.params;
+  const [userId, setUserId] = useState("");
+  const [title, setTitle] = useState(deckData.title);
+  const [description, setDescription] = useState(deckData.description);
+  const [cards, setCards] = useState(deckData.cards);
+
   const navigation = useNavigation();
   const handleCardClick = () => {
-    navigation.navigate("DeckPage");
+    navigation.goBack();
   };
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const storedUserId = await AsyncStorage.getItem("userId");
+        setUserId(storedUserId || ""); // Set the user ID or an empty string if not found
+      } catch (error) {
+        console.error("Error fetching user ID:", error);
+      }
+    };
+
+    fetchUserId();
+  }, []);
+
+  async function UpdateDeck() {
+    const updatedDeck = {
+      deckId: deckData.deckId,
+      title: title,
+      description: description,
+      cards: cards,
+    };
+    console.log("Updated Deck:", updatedDeck);
+    try {
+      AsyncStorage.getItem("sessionCookie", (error, result) => {
+        if (error) {
+          console.error(error);
+          return;
+        }
+        const sessionCookie = result;
+        //console.log(sessionCookie);
+        axios
+          .post(
+            "https://flashcard-backend-kuup.onrender.com/decks/deckUpdate",
+            updatedDeck,
+            {
+              headers: {
+                Cookie: sessionCookie,
+              },
+            }
+          )
+          .then((response) => {
+            console.log("Deck update successfully:", response.data);
+            setDeckData((prevDeckData) => {
+              const updatedIndex = prevDeckData.findIndex(
+                (deck) => deck.deckId === deckData.deckId
+              );
+
+              const newDeckData = [...prevDeckData];
+              newDeckData[updatedIndex] = updatedDeck;
+
+              return newDeckData;
+            });
+          })
+          .catch((error) => {
+            console.error("Error updating deck:", error.response.data);
+          });
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   // Use deckData to render the DeckView screen
   const renderItem = ({ item }) => (
     <View
@@ -41,6 +113,55 @@ const DeckView = ({ route }) => {
   const Learn = () => {
     navigation.navigate("DeckLearn", { deckData });
   };
+  const Edit = () => {
+    console.log(cards);
+    navigation.navigate("CardListEdit", {
+      cards,
+      setCards,
+    });
+  };
+  const Delete = async () => {
+    const updatedDeck = {
+      deckId: deckData.deckId,
+    };
+    try {
+      AsyncStorage.getItem("sessionCookie", (error, result) => {
+        if (error) {
+          console.error(error);
+          return;
+        }
+        const sessionCookie = result;
+        //console.log(sessionCookie);
+        axios
+          .post(
+            "https://flashcard-backend-kuup.onrender.com/decks/delete",
+            updatedDeck,
+            {
+              headers: {
+                Cookie: sessionCookie,
+              },
+            }
+          )
+          .then((response) => {
+            console.log("Deck delete successfully:", response.data);
+            setDeckData((prevDeckData) => {
+              // Use filter to create a new array without the deck to be removed
+              const newDeckData = prevDeckData.filter(
+                (deck) => deck.deckId !== updatedDeck.deckId
+              );
+
+              return newDeckData;
+            });
+            navigation.goBack();
+          })
+          .catch((error) => {
+            console.error("Error deleting deck:", error.response.data);
+          });
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.returnView}>
@@ -52,11 +173,14 @@ const DeckView = ({ route }) => {
             style={{ transform: [{ rotateY: "180deg" }] }}
           />
         </TouchableOpacity>
+        <TouchableOpacity onPress={UpdateDeck}>
+          <FontAwesomeIcon icon="fa-check" color={"white"} size={26} />
+        </TouchableOpacity>
       </View>
       <ScrollView>
         <View style={styles.deckPreview}>
           <FlatList
-            data={deckData.cards}
+            data={cards}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
             horizontal
@@ -68,10 +192,17 @@ const DeckView = ({ route }) => {
         </View>
         <View style={styles.deckData}>
           <View style={styles.contentContainer}>
-            <TextInput style={styles.topLeftText} value={deckData.deckName} />
+            <TextInput
+              style={styles.topLeftText}
+              value={title}
+              onChangeText={(text) => setTitle(text)}
+            />
             <TextInput
               style={styles.bodyText}
-              value={deckData.deckDescription}
+              value={description}
+              onChangeText={(text) => setDescription(text)}
+              multiline={true}
+              numberOfLines={3}
             />
           </View>
           <View style={styles.bottomRow}>
@@ -87,14 +218,24 @@ const DeckView = ({ route }) => {
           </View>
         </View>
         <View style={styles.options}>
-          <DeckOption icon={"fa-pencil"} text={"Edit Cards"}></DeckOption>
+          <DeckOption
+            icon={"fa-pencil"}
+            text={"Edit Cards"}
+            onPress={Edit}
+            disabled={userId !== deckData.userId}
+          ></DeckOption>
           <DeckOption
             icon={"fa-book"}
             text={"Learn"}
             onPress={Learn}
           ></DeckOption>
           <DeckOption icon={"fa-gamepad"} text={"Play"}></DeckOption>
-          <DeckOption icon={"fa-trash"} text={"Delete"}></DeckOption>
+          <DeckOption
+            icon={"fa-trash"}
+            text={"Delete"}
+            onPress={Delete}
+            disabled={userId !== deckData.userId}
+          ></DeckOption>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -111,6 +252,8 @@ const styles = StyleSheet.create({
   },
   returnView: {
     margin: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   deckPreview: {
     marginTop: 20,
