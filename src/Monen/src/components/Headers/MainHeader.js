@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,20 +8,37 @@ import {
   StyleSheet,
   SafeAreaView,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { faMugSaucer } from "@fortawesome/free-solid-svg-icons/faMugSaucer";
 
 import { dark_gray } from "../../constants/colors.js";
 
-export default function Header({
-  username,
-  profilePictureSource,
-  onMenuPress,
-}) {
+export default function Header({ onMenuPress }) {
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    // Fetch the new username from AsyncStorage
+    const fetchUserData = async () => {
+      try {
+        const storedUsername = await AsyncStorage.getItem("userName");
+        // Set the new username to state
+        setUsername(storedUsername || "Default User");
+      } catch (error) {
+        console.error("Error fetching username from AsyncStorage:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   return (
     <SafeAreaView style={styles.headerContainer}>
       <View style={styles.profileContainer}>
-        <Image source={profilePictureSource} style={styles.profilePicture} />
+        <Image
+          source={require("../../assets/tmp.png")}
+          style={styles.profilePicture}
+        />
         <Text style={styles.username}>{username}</Text>
       </View>
       <TouchableOpacity onPress={onMenuPress} style={styles.menuButton}>
@@ -38,7 +55,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "black",
     padding: 15,
-    margin: 20,
+    margin: 10,
     marginBottom: 0,
     marginTop: 5,
   },

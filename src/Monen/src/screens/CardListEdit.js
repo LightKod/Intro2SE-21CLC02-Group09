@@ -24,14 +24,15 @@ const CardListEdit = ({ route }) => {
 
   const addCard = () => {
     const newCard = { question: "", answer: "" };
-    const updatedCards = [...cards, newCard];
+    const updatedCards = [...newCards, newCard];
+    console.log(updatedCards);
+
     setCards(updatedCards);
     setNewCards(updatedCards);
     setScrollViewKey((prevKey) => prevKey + 1);
   };
 
   const renderCardWidgets = () => {
-    console.log("Render");
     return newCards.map((card, index) => (
       <CardDataWidget
         key={index}

@@ -19,7 +19,7 @@ export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
   const [errLogin, setErrLogin] = useState("");
-  const saveCookies = async (cookieHeaderValue, userId) => {
+  const saveCookies = async (cookieHeaderValue, data) => {
     if (cookieHeaderValue) {
       // Concatenate all cookies into a single string
       const connectSidValue = cookieHeaderValue[0].split(";")[0];
@@ -32,11 +32,18 @@ export default function LoginScreen({ navigation }) {
         }
       });
 
-      await AsyncStorage.setItem("userId", userId, (error) => {
+      await AsyncStorage.setItem("userId", data.id, (error) => {
         if (error) {
           console.error("Error saving sessionCookie:", error);
         }
       });
+
+      await AsyncStorage.setItem("userName", data.name, (error) => {
+        if (error) {
+          console.error("Error saving sessionCookie:", error);
+        }
+      });
+      console.log(data.name);
     }
   };
 
@@ -58,7 +65,7 @@ export default function LoginScreen({ navigation }) {
         console.log("Login success:", response.data);
         // console.log(response.headers['set-cookie']);
         // Save the cookies in AsyncStorage
-        saveCookies(response.headers["set-cookie"], response.data.id);
+        saveCookies(response.headers["set-cookie"], response.data);
 
         // Redirect or perform other actions
         navigation.reset({
