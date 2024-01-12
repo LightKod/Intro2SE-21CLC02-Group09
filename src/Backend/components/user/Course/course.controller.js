@@ -99,3 +99,15 @@ exports.updateCourse = async (req, res, next) => {
         res.status(400).json(error);
     }
 }
+exports.getAllDeck = async (req, res, next) => {
+    try
+    {
+        const courseId = req.params.courseId
+        const result = await ServiceCourse.getAllDeck(courseId,creatorId)
+        res.status(200).json(result);
+    }
+    catch(error)
+    {
+        res.status(400).json(error);
+    }
+}

@@ -1,5 +1,6 @@
 const Course = require('../../../models/Course');
 const User = require('../../../models/User');
+const Deck = require('../../../models/Deck');
 const {v4: uuidv4} = require('uuid');
 exports.getAllCourse = async (creatorId, studentId) => {
     try {
@@ -159,4 +160,24 @@ exports.updateCourse = async (courseInfo,creatorId) => {
     {
         throw new Error(error)
     }
+}
+exports.getAllDeck = async (courseId) => {
+    try
+    {
+        const course = await Course.findOne({ courseId: courseId });
+        if(course == null)
+        {
+            throw new Error('course not found')
+        }
+        const decks= await Deck.find({ deckId: { $in: course.decks } })
+        if (decks == null) {
+            throw new Error('decks not found')
+        }
+        return decks
+    }
+    catch(error)
+    {
+        throw new Error(error)
+    }
+    
 }
