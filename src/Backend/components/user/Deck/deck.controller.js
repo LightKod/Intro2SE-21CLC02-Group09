@@ -62,13 +62,13 @@ exports.cardsDeckUpdate = async (req, res, next) => {
     try {
         const userId = req.user.id
         const deckUpdate = req.body
-     
+        console.log(deckUpdate)
         const result = await ServiceDeck.cardsDeckUpdate(userId,deckUpdate);
         if(result == null)
         {
-            res.status(400).send('user not found or deck not found update deck fail');
+           return res.status(400).send('user not found or deck not found update deck fail');
         }
-        res.status(200).json(result);
+        return res.status(200).json(result);
     } catch (error) {
         res.status(400).json(error);
     }
