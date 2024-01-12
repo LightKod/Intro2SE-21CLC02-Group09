@@ -22,6 +22,7 @@ import CustomText from "components/Text/CustomText";
 import DeckOption from "components/DeckView/DeckOption";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ScrollView } from "react-native-gesture-handler";
+import CustomModal from "components/CustomModal";
 import axios from "axios";
 
 LogBox.ignoreLogs([
@@ -34,7 +35,11 @@ const DeckView = ({ route }) => {
   const [title, setTitle] = useState(deckData.title);
   const [description, setDescription] = useState(deckData.description);
   const [cards, setCards] = useState(deckData.cards);
+  const [isSuccessModalVisible, setSuccessModalVisible] = useState(false);
 
+  const toggleSuccessModal = () => {
+    setSuccessModalVisible(!isSuccessModalVisible);
+  };
   const navigation = useNavigation();
   const handleCardClick = () => {
     navigation.goBack();
@@ -90,6 +95,7 @@ const DeckView = ({ route }) => {
 
               return newDeckData;
             });
+            toggleSuccessModal();
           })
           .catch((error) => {
             console.error("Error updating deck:", error.response.data);
@@ -173,9 +179,11 @@ const DeckView = ({ route }) => {
             style={{ transform: [{ rotateY: "180deg" }] }}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={UpdateDeck}>
-          <FontAwesomeIcon icon="fa-check" color={"white"} size={26} />
-        </TouchableOpacity>
+        {deckData.userId === userId && (
+          <TouchableOpacity onPress={UpdateDeck}>
+            <FontAwesomeIcon icon="fa-check" color={"white"} size={26} />
+          </TouchableOpacity>
+        )}
       </View>
       <ScrollView>
         <View style={styles.deckPreview}>
@@ -196,6 +204,7 @@ const DeckView = ({ route }) => {
               style={styles.topLeftText}
               value={title}
               onChangeText={(text) => setTitle(text)}
+              editable={deckData.userId === userId}
             />
             <TextInput
               style={styles.bodyText}
@@ -203,6 +212,7 @@ const DeckView = ({ route }) => {
               onChangeText={(text) => setDescription(text)}
               multiline={true}
               numberOfLines={3}
+              editable={deckData.userId === userId}
             />
           </View>
           <View style={styles.bottomRow}>
@@ -234,10 +244,14 @@ const DeckView = ({ route }) => {
             icon={"fa-trash"}
             text={"Delete"}
             onPress={Delete}
-            disabled={userId !== deckData.userId}
           ></DeckOption>
         </View>
       </ScrollView>
+      <CustomModal
+        isVisible={isSuccessModalVisible}
+        message="Deck updated successfully!"
+        onConfirm={toggleSuccessModal}
+      />
     </SafeAreaView>
   );
 };

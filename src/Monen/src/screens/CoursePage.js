@@ -72,7 +72,7 @@ const CoursePage = () => {
           title: "Course title",
           description: "Course description",
           decks: [],
-          studentID: [],
+          studentId: [],
         };
         axios
           .post(
@@ -108,14 +108,13 @@ const CoursePage = () => {
 
   // Function to handle when a course is clicked
   const handleCourseClick = (course) => {
-    console.log("Course clicked:", course.title);
     navigation.navigate("CourseDetail", { course: course });
   };
 
   useEffect(() => {
     // Fetch course data on component mount
-      fetchCourseData();
-    }, [isFocused]);  
+    fetchCourseData();
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -136,9 +135,9 @@ const CoursePage = () => {
           </TouchableOpacity>
         </View>
         {filteredCourses.map((course, index) => (
-          <TouchableOpacity 
-            key={index} 
-            style={styles.course} 
+          <TouchableOpacity
+            key={index}
+            style={styles.course}
             onPress={() => handleCourseClick(course)} // Using the new function name
           >
             <Text style={styles.courseTitle}>{course.title}</Text>

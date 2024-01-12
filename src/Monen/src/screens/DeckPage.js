@@ -30,8 +30,8 @@ const DeckPage = () => {
   const profilePictureSource = require("../assets/tmp.png");
   const isFocused = useIsFocused();
   const [deckData, setDeckData] = useState([]);
-  const [searchText, setSearchText] = useState("");
   const [filteredDecks, setFilteredDecks] = useState([]);
+  const [searchText, setSearchText] = useState("");
   const fetchDeckData = async () => {
     try {
       AsyncStorage.getItem("sessionCookie", (error, result) => {
